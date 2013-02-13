@@ -1,10 +1,19 @@
-public Class ContactImpl implements Contact {
+public class ContactImpl implements Contact {
+	
+	private int id;
+	private String name;
+	
+	public ContactImpl(int id, String name){
+		this.id = id;
+		this.name = name;
+	}
+	
 	/**
 	* Returns the ID of the contact.
 	*
 	* @return the ID of the contact.
 	*/
-	int getId(){
+	public int getId(){
 		return 0;
 	}
 	/**
@@ -12,7 +21,7 @@ public Class ContactImpl implements Contact {
 	*
 	* @return the name of the contact.
 	*/
-	String getName(){
+	public String getName(){
 		return "";
 	}
 	/**
@@ -23,7 +32,7 @@ public Class ContactImpl implements Contact {
 	*
 	* @return a string with notes about the contact, maybe empty.
 	*/
-	String getNotes(){
+	public String getNotes(){
 		return "";
 	}
 	/**
@@ -31,7 +40,7 @@ public Class ContactImpl implements Contact {
 	*
 	* @param note the notes to be added
 	*/
-	void addNotes(String note){
+	public void addNotes(String note){
 		;
 	}
 }
