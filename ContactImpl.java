@@ -14,7 +14,7 @@ public class ContactImpl implements Contact {
 	* @return the ID of the contact.
 	*/
 	public int getId(){
-		return 0;
+		return this.id;
 	}
 	/**
 	* Returns the name of the contact.
@@ -33,7 +33,7 @@ public class ContactImpl implements Contact {
 	* @return a string with notes about the contact, maybe empty.
 	*/
 	public String getNotes(){
-		return "";
+		return null;
 	}
 	/**
 	* Add notes about the contact.
