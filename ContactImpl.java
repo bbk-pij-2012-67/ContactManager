@@ -50,14 +50,16 @@ public class ContactImpl implements Contact, Comparable<Contact> {
 		this.note = note;
 	}
 	
-	public int compareTo(<Contact> cn){
+	public int compareTo(Contact cn){
+		int result = 0;
 		if(cn.getId() == this.getId()){
-			return 0;
+			result = 0;
 		}else if(this.getId()< cn.getId()){
-			return -1;
+			result = -1;
 		}else if(this.getId() > cn.getId()){
-			return 1;
+			result = 1;
 		}
+		return result;
 	}
 			
 }
