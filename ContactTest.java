@@ -37,8 +37,13 @@ public class ContactTest{
 			randomList[c] = "" + Math.random();
 			testContact[c].addNotes("" + randomList[c]);
 		}
+		
+		
 		for(int c = 0;c<testSize;c++){
 			assertEquals(randomList[c],testContact[c].getNotes());
 		}
+		// test for no notes saved.
+		Contact testContact2 = new ContactImpl(99999,"a");
+		assertEquals("",testContact2.getNotes());
 	}
 }
