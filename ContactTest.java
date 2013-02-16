@@ -19,23 +19,14 @@ public class ContactTest{
 	
 	@Test
 	public void testsGetId(){
-		//int testSize = 100;
-		//Contact[] testContact = new ContactImpl[testSize];
-		//for(int c = 0;c<testSize;c++){
-		//	testContact[c] = new ContactImpl(c,"" + c);
-		//}
+		
 		for(int c = 0;c<testSize;c++){
 			assertEquals(c,testContact[c].getId());
 		}
 	}
 	
 	@Test
-	public void testsGetName(){
-		//int testSize = 100;
-		//Contact[] testContact = new ContactImpl[testSize];
-		//for(int c = 0;c<testSize;c++){
-		//	testContact[c] = new ContactImpl(c,"" + c);
-		//}
+	public void testsGetName(){	
 		for(int c = 0;c<testSize;c++){
 			assertTrue(("" + c).equals(testContact[c].getName()));
 		}
@@ -45,7 +36,6 @@ public class ContactTest{
 	public void testsAddGetNotes(){
 		
 		for(int c = 0;c<testSize;c++){
-			//testContact[c] = new ContactImpl(c,"" + c);
 			randomList[c] = "" + Math.random();
 			testContact[c].addNotes("" + randomList[c]);
 		}

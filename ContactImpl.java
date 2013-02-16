@@ -1,4 +1,4 @@
-public class ContactImpl implements Contact {
+public class ContactImpl implements Contact, Comparable<Contact> {
 	
 	private int id;
 	private String name;
@@ -49,4 +49,15 @@ public class ContactImpl implements Contact {
 	public void addNotes(String note){
 		this.note = note;
 	}
+	
+	public int compareTo(<Contact> cn){
+		if(cn.getId() == this.getId()){
+			return 0;
+		}else if(this.getId()< cn.getId()){
+			return -1;
+		}else if(this.getId() > cn.getId()){
+			return 1;
+		}
+	}
+			
 }
