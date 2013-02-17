@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Set;
 import java.util.TreeSet;
 
+
+
 public class MeetingTest{
 	
 	private int testSize;
@@ -16,23 +18,25 @@ public class MeetingTest{
 		testSize = 100;
 		testMeeting = new MeetingImpl[testSize];
 		//Create a set of contacts
-		testContacts = new TreeSet<Contact>;
+		testContacts = new TreeSet<Contact>();
 		for(int c = 0;c < 10;c++){
 			testContacts.add(new ContactImpl(c,"" + c));
 		}
-		//randomList = new String[100];
 		//Add test dates to the meetings. Store the dates in an
 		//array.
+		calArray = new Calendar[testSize];
 		for(int c = 0;c<testSize;c++){
-			Calendar cal = Calendar.getInstance();
-			calArray = new Calendar[testSize];
-			int year = (int)(Math.random * 5)+2013;
-			int month = (int)(Math.random * 12)+ 1;
-			int day = (int)(Math.random * 28)+ 1;
+			
+			//Create a random date
+			int year = (int)(Math.random() * 5)+2013;
+			int month = (int)(Math.random() * 12)+ 1;
+			int day = (int)(Math.random() * 28)+ 1;
 			calArray[c] = Calendar.getInstance();
 			calArray[c].set(year,month,day);
-			cal.set(year,month,day)
-			testMeeting[c] = new MeetingImpl(c,cal,testContacts);
+			//System.out.println(calArray[c].getTime().toString());
+			//cal.set(year,month,day);
+			testMeeting[c] = new MeetingImpl(c,(Calendar)(calArray[c].clone()),testContacts);
+			
 		}
 	}
 	
@@ -46,7 +50,7 @@ public class MeetingTest{
 	@Test
 	public void testsGetDate(){
 		for(int c = 0;c<testSize;c++){
-			assertEquals(calArray[c].equals(testMeeting[c].getDate()));
+			assertTrue(calArray[c].equals(testMeeting[c].getDate()));
 		}
 	}
 	
@@ -55,6 +59,14 @@ public class MeetingTest{
 		for(int c = 0;c<testSize;c++){
 			assertTrue(testMeeting[c].getContacts()==testContacts);
 		}
+	}
+	
+	@After
+	public void cleanUp(){
+		testSize = 0;
+		testMeeting = null;
+		testContacts = null;
+		calArray = null;
 	}
 }
 	
