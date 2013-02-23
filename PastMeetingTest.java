@@ -12,11 +12,14 @@ public class MeetingTest{
 	private Meeting[] testMeeting;
 	private Set<Contact> testContacts;
 	private Calendar[] calArray;
+	private String[] testNotes;
 	
 	@Before
 	public void initialise(){
 		testSize = 100;
 		testMeeting = new PastMeetingImpl[testSize];
+		//create an array of notes
+		testNotes = new String[testSize];
 		//Create a set of contacts
 		testContacts = new TreeSet<Contact>();
 		for(int c = 0;c < 10;c++){
@@ -33,9 +36,8 @@ public class MeetingTest{
 			int day = (int)(Math.random() * 28)+ 1;
 			calArray[c] = Calendar.getInstance();
 			calArray[c].set(year,month,day);
-			//System.out.println(calArray[c].getTime().toString());
-			//cal.set(year,month,day);
-			testMeeting[c] = new MeetingImpl(c,(Calendar)(calArray[c].clone()),testContacts);
+			testNotes[c]=Math.random().toString();
+			testMeeting[c] = new MeetingImpl(c,(Calendar)(calArray[c].clone()),testContacts,testNotes[c]);
 			
 		}
 	}
@@ -61,6 +63,10 @@ public class MeetingTest{
 		}
 	}
 	
+	@Test
+	public void testsGetNotes(){
+		
+		
 	
 	
 	@After
