@@ -6,10 +6,10 @@ import java.util.TreeSet;
 
 
 
-public class MeetingTest{
+public class PastMeetingTest{
 	
 	private int testSize;
-	private Meeting[] testMeeting;
+	private PastMeeting[] testMeeting;
 	private Set<Contact> testContacts;
 	private Calendar[] calArray;
 	private String[] testNotes;
@@ -36,8 +36,8 @@ public class MeetingTest{
 			int day = (int)(Math.random() * 28)+ 1;
 			calArray[c] = Calendar.getInstance();
 			calArray[c].set(year,month,day);
-			testNotes[c]=Math.random().toString();
-			testMeeting[c] = new MeetingImpl(c,(Calendar)(calArray[c].clone()),testContacts,testNotes[c]);
+			testNotes[c] = Math.random() + "";
+			testMeeting[c] = new PastMeetingImpl(c,(Calendar)(calArray[c].clone()),testContacts,testNotes[c]);
 			
 		}
 	}
@@ -48,7 +48,7 @@ public class MeetingTest{
 		for(int c = 0;c<testSize;c++){
 			assertEquals(testNotes[c],testMeeting[c].getNotes());
 		}
-		
+	}	
 	
 	
 	@After
