@@ -42,30 +42,12 @@ public class MeetingTest{
 		}
 	}
 	
-	@Test
-	public void testsGetId(){
-		for(int c = 0;c<testSize;c++){
-			assertEquals(c,testMeeting[c].getId());
-		}
-	}
-	
-	@Test
-	public void testsGetDate(){
-		for(int c = 0;c<testSize;c++){
-			assertTrue(calArray[c].equals(testMeeting[c].getDate()));
-		}
-	}
-	
-	@Test
-	public void testsGetContacts(){
-		for(int c = 0;c<testSize;c++){
-			assertTrue(testMeeting[c].getContacts()==testContacts);
-		}
-	}
 	
 	@Test
 	public void testsGetNotes(){
-		
+		for(int c = 0;c<testSize;c++){
+			assertEquals(testNotes[c],testMeeting[c].getNotes());
+		}
 		
 	
 	
