@@ -20,6 +20,7 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting{
 	*/
 	public PastMeetingImpl(int id, Calendar date, Set<Contact> contacts,String notes){
 		super(id,date,contacts);
+		this.notes = notes;
 	}
 	
 	/**
@@ -30,6 +31,6 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting{
 	* @return the notes from the meeting.
 	*/
 	public String getNotes(){
-		return null;
+		return notes;
 	}
 }
