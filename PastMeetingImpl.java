@@ -11,7 +11,7 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting{
 	private String notes;
 	
 	/**
-	* Constructor creates a new MeetingImpl object.
+	* Constructor creates a new PastMeetingImpl object.
 	*
 	* @param id int value of the meeting ID.
 	* @param date Calendar object storing the date of the meeting.
