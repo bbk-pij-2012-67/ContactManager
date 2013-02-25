@@ -1,12 +1,15 @@
 import org.junit.*;
-import static org.junit.Assert*;
+import static org.junit.Assert.*;
+import java.util.Calendar;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ContactManagerTest{
 
 	private Set<Contact> testContacts;
 	private Calendar[] calArray;
 	private int testSize;
-	ContactManager cm
+	ContactManager cm;
 	private int[] futureMeetingIDs;
 
 	@Before
@@ -18,6 +21,7 @@ public class ContactManagerTest{
 		testContacts = new TreeSet<Contact>();
 		for(int c = 0;c < 10;c++){
 			testContacts.add(new ContactImpl(c,"" + c));
+			cm.addNewContact("" + c,"" + c + c);
 		}
 
 		//Store some dates in an array.
@@ -50,6 +54,30 @@ public class ContactManagerTest{
 		//test for non-existent id
 		fm = cm.getFutureMeeting(-1);
 		assertEquals(fm,null);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void TestsAddFutureMeetingPastDate(){
+		Calendar date = Calendar.getInstance();
+		date.set(2010,1,1);
+		cm.addFutureMeeting(testContacts,date);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void TestsAddFutureMeetingContactUnknown(){
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.DATE,1);
+		cm.addFutureMeeting(testContacts,date);
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void TestsAddNewContactNoName(){
+		cm.addNewContact(null,"a");
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void TestsAddNewContactNoName(){
+		cm.addNewContact("a",null);
 	}
 
 
