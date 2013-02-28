@@ -158,7 +158,15 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws NullPointerException if the name or the notes are null
 	*/
 	public void addNewContact(String name, String notes){
-		;
+		Contact cn;
+		if(notes == null || name == null){
+			throw new NullPointerException("Either name or notes is null");
+		}else{
+			id++;
+			cn = new ContactImpl(id,name);
+			cn.addNotes(notes);
+		}
+		contacts.add(cn);
 			
 	}
 	
