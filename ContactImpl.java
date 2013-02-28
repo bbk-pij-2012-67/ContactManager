@@ -41,6 +41,7 @@ public class ContactImpl implements Contact, Comparable<Contact> {
 		}
 		return note;
 	}
+	
 	/**
 	* Add notes about the contact.
 	*

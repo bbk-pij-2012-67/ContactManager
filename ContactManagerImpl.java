@@ -171,8 +171,23 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws IllegalArgumentException if any of the IDs does not correspond to a real contact
 	*/
 	public Set<Contact> getContacts(int... ids){
-		
-		return null;
+		boolean contactNotFound = false;
+		Set<Contact> cns = new TreeSet<>();
+		//search for incidence of each parameter id in contacts list
+		for(int c = 0;c < ids.length;c++){
+			contactNotFound = true;
+			for(Contact contact : contacts){
+				if(contact.getId() == ids[c]){
+						cns.add(contact);
+						contactNotFound = false;
+				}
+			}
+			if(contactNotFound){
+				throw new IllegalArgumentException();
+					
+			}
+		}
+		return cns;
 	}
 	
 	
