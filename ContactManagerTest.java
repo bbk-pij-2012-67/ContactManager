@@ -18,9 +18,9 @@ public class ContactManagerTest{
 		futureMeetingIDs = new int[testSize];
 		cm = new ContactManagerImpl();
 		//Create a set of contacts
-		testContacts = new TreeSet<Contact>();
+		//testContacts = new TreeSet<Contact>();
 		for(int c = 0;c < 10;c++){
-			testContacts.add(new ContactImpl(c,"" + c));
+			//testContacts.add(new ContactImpl(c,"" + c));
 			cm.addNewContact("" + c,"" + c + c);
 		}
 
@@ -76,8 +76,35 @@ public class ContactManagerTest{
 	}
 	
 	@Test(expected = NullPointerException.class)
-	public void TestsAddNewContactNoName(){
+	public void TestsAddNewContactNoNotes(){
 		cm.addNewContact("a",null);
+	}
+	
+	@Test
+	public void TestsGetContactsByIDs(){
+		Set<Contact> contacts = cm.getContacts(1,2,3,4,5,6,7,8,9,10);
+		assertEquals(contacts.size(),10);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void TestsGetContactsByInvalidID(){
+		Set<Contact> contacts = cm.getContacts(9999);
+		assertEquals(contacts.size(),1);
+	}
+	
+	@Test
+	public void TestsGetContactsByName(){
+		for(int c = 0;c < 10; c++){
+			Set<Contact> contacts = cm.getContacts("" + c);
+		}
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void TestsGetContactsByInvalidName(){
+		for(int c = 0;c < 10; c++){
+			Set<Contact> contacts = cm.getContacts("9999");
+
+		}
 	}
 
 
