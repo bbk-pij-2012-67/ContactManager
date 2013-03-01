@@ -29,24 +29,22 @@ public class ContactManagerTest{
 
 		//Store some dates in an array.
 		calArray = new Calendar[testSize];
-		for(int c = 0;c<testSize;c++){
-
+		for(int c = 0;c<testSize/2;c++){
 			//Create a random future date
-			
+			//half the testsize amount
 			calArray[c] = getRandomDate(false);
-		
 		}
 
 
 		//Create FutureMeeting objects
-		for(int c = 0; c < testSize; c++){
+		for(int c = 0; c < testSize/2; c++){
 			futureMeetingIDs[c] = cm.addFutureMeeting(testContacts,calArray[c]);
 		}
 	}
 	
 	private Calendar getRandomDate(boolean pastDate){
 		Calendar date = null;
-		for(int c = 0;c<testSize;c++){
+		
 
 			//Create a random date
 			date = Calendar.getInstance();
@@ -61,7 +59,7 @@ public class ContactManagerTest{
 			int day = (int)(Math.random() * 28)+ 1;
 			
 			date.set(year,month,day);
-		}
+		
 		return date;
 	}
 		
@@ -69,7 +67,7 @@ public class ContactManagerTest{
 	@Test
 	public void TestsGetFutureMeeting(){
 		FutureMeeting fm;
-		for(int c = 0; c < testSize; c++){
+		for(int c = 0; c < testSize/2; c++){
 			fm = cm.getFutureMeeting(futureMeetingIDs[c]);
 
 			assertEquals(fm.getContacts(),testContacts);
