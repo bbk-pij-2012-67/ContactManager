@@ -47,7 +47,7 @@ public class ContactManagerTest{
 		}
 		//Create PastMeeting objects
 		for(int c = testSize/2 + 1;c < testSize;c++){
-			MeetingIDs[c] = cm.addNewPastMeeting(testContacts,calArray[c],"" + c);
+			cm.addNewPastMeeting(testContacts,calArray[c],"" + c);
 		}
 	}
 	
@@ -89,14 +89,15 @@ public class ContactManagerTest{
 	@Test
 	public void TestsGetMeeting(){
 		Meeting mg;
-		for(int c = 0; c < testSize; c++){
-			mg = cm.getMeeting(MeetingIDs[c]);
+		ContactManagerImpl cmi = (ContactManagerImpl)(cm);
+		for(Integer id : cmi.getPastMeetingIDs()){
+			mg = cm.getMeeting(id);
 
-			assertEquals(fm.getContacts(),testContacts);
+			assertEquals(mg.getContacts(),testContacts);
 		}
 		//test for non-existent id
-		fm = cm.getMeeting(-1);
-		assertEquals(fm,null);
+		mg = cm.getMeeting(-1);
+		assertEquals(mg,null);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
