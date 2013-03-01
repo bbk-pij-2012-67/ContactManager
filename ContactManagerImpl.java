@@ -78,9 +78,41 @@ public class ContactManagerImpl implements ContactManager {
 	* @param id the ID for the meeting
 	* @return the meeting with the requested ID, or null if it there is none.
 	* @throws IllegalArgumentException if there is a meeting with that ID happening in the future
-	1
+	*
 	*/
 	public PastMeeting getPastMeeting(int id){
+		//find meeting with id
+		Meeting returnedMeeting;
+		boolean meetingFound = false;
+		for(Meeting meeting : meetings){
+			if(id == meeting.getId()){
+				meetingFound = true;
+				
+				returnedMeeting = meeting;
+			}
+		}
+		if(!meetingFound){
+			//meeting not found
+			return null;
+		}
+		//Check if the date of the meeting is in the future
+		if((Calendar.getInstance()).before(returnedMeeting.getDate())){
+			throw new IllegalArgumentException();
+		}else{
+			//if it is not in the future, but it is a futureMeeting,
+			//then create a pastMeeting in its place.
+			if(returnedMeeting instanceOf PastMeetingImpl){
+				return returnedMeeting;
+			}else if(returnedMeeting instance of FutureMeetingImpl){
+				Calendar mtDate = returnedMeeting.getDate();
+				Set<Contact> mtContacts = returnedMeeting.getContacts();
+				meetings.remove(returnedMeeting);
+				Meeting updatedMeeting = new PastMeetingImpl(id,mtDate,mtContacts,null);
+				meetings.add(updatedMeeting);
+				return updatedMeeting;
+			}
+		
+		
 		return null;
 	}
 
