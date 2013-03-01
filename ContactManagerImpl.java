@@ -1,5 +1,6 @@
 import java.util.Calendar;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -11,10 +12,13 @@ public class ContactManagerImpl implements ContactManager {
 	private List<Meeting> meetings;
 	private Set<Contact> contacts;
 	private int nextContactId;
+	private int nextMeetingId;
 
 	public ContactManagerImpl(){
 		contacts = new TreeSet<>();
 		nextContactId = 0;
+		nextMeetingId = 0;
+		meetings = new LinkedList<>();
 	}
 
 
@@ -28,8 +32,44 @@ public class ContactManagerImpl implements ContactManager {
 	* of if any contact is unknown / non-existent
 	*/
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date){
-		return 0;
+		//Check if date is in the past.
+		if(date.before(Calendar.getInstance())){
+			throw new IllegalArgumentException("Date is past");
+		}else if(!contactsAreValid(contacts)){
+			throw new IllegalArgumentException("Contact unknown");
+		}
+		nextMeetingId++;
+		Meeting meeting = new FutureMeetingImpl(nextMeetingId,date,contacts);
+		meetings.add(meeting);
+
+		return nextMeetingId;
 	}
+
+
+	private boolean contactsAreValid(Set<Contact> contacts){
+
+		boolean contactNotFound = true;
+		//boolean result = false;
+
+		//Check if each contact is valid
+		for(Contact contact : contacts){
+			contactNotFound = true;
+			int id = contact.getId();
+			String name = contact.getName();
+			for(Contact mContact : this.contacts){
+				if(mContact.getId() == id && (mContact.getName()).equals(name)){
+					contactNotFound = false;
+					//result = true;
+				}
+			}
+			if(contactNotFound){
+				return false;
+			}
+
+		}
+		return true;
+	}
+
 
 
 	/**
@@ -163,7 +203,7 @@ public class ContactManagerImpl implements ContactManager {
 			throw new NullPointerException("Either name or notes is null");
 		}else{
 			nextContactId++;
-			cn = new ContactImpl(id,name);
+			cn = new ContactImpl(nextContactId,name);
 			cn.addNotes(notes);
 		}
 		contacts.add(cn);
