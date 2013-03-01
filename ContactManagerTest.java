@@ -11,12 +11,12 @@ public class ContactManagerTest{
 	private Calendar[] calArray;
 	private int testSize;
 	ContactManager cm;
-	private int[] futureMeetingIDs;
+	private int[] MeetingIDs;
 
 	@Before
 	public void initialize(){
 		testSize = 100;
-		futureMeetingIDs = new int[testSize];
+		MeetingIDs = new int[testSize];
 		cm = new ContactManagerImpl();
 		//Create a set of contacts
 		testContacts = new TreeSet<Contact>();
@@ -34,11 +34,20 @@ public class ContactManagerTest{
 			//half the testsize amount
 			calArray[c] = getRandomDate(false);
 		}
+		for(int c = testSize/2 + 1;c < testSize;c++){
+			//Create a random past date
+			//half the testsize amount
+			calArray[c] = getRandomDate(true);
+		}
 
 
 		//Create FutureMeeting objects
 		for(int c = 0; c < testSize/2; c++){
-			futureMeetingIDs[c] = cm.addFutureMeeting(testContacts,calArray[c]);
+			MeetingIDs[c] = cm.addFutureMeeting(testContacts,calArray[c]);
+		}
+		//Create PastMeeting objects
+		for(int c = testSize/2 + 1;c < testSize;c++){
+			MeetingIDs[c] = cm.addNewPastMeeting(testContacts,calArray[c],"" + c);
 		}
 	}
 	
@@ -68,7 +77,7 @@ public class ContactManagerTest{
 	public void TestsGetFutureMeeting(){
 		FutureMeeting fm;
 		for(int c = 0; c < testSize/2; c++){
-			fm = cm.getFutureMeeting(futureMeetingIDs[c]);
+			fm = cm.getFutureMeeting(MeetingIDs[c]);
 
 			assertEquals(fm.getContacts(),testContacts);
 		}
@@ -77,18 +86,18 @@ public class ContactManagerTest{
 		assertEquals(fm,null);
 	}
 	
-	/*@Test
+	@Test
 	public void TestsGetMeeting(){
 		Meeting mg;
 		for(int c = 0; c < testSize; c++){
-			mg = cm.getMeeting(futureMeetingIDs[c]);
+			mg = cm.getMeeting(MeetingIDs[c]);
 
 			assertEquals(fm.getContacts(),testContacts);
 		}
 		//test for non-existent id
-		fm = cm.getFutureMeeting(-1);
+		fm = cm.getMeeting(-1);
 		assertEquals(fm,null);
-	}*/
+	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void TestsAddFutureMeetingPastDate(){
@@ -149,6 +158,6 @@ public class ContactManagerTest{
 		testContacts = null;
 		calArray= null;
 		cm = null;
-		futureMeetingIDs = null;
+		MeetingIDs = null;
 	}
 }

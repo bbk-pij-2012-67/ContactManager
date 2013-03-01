@@ -150,6 +150,8 @@ public class ContactManagerImpl implements ContactManager {
 			return null;
 		}
 	}
+	
+	
 
 
 	/**
@@ -319,6 +321,16 @@ public class ContactManagerImpl implements ContactManager {
 		}
 
 		return cns;
+	}
+	
+	public List<Integer> getPastMeetingIDs(){
+		List<Integer> ids = new LinkedList<>();
+		for(Meeting meeting : meetings){
+			if(meeting instanceof PastMeetingImpl){
+				ids.add(meeting.getId());
+			}
+		}
+		return ids;
 	}
 
 
