@@ -31,12 +31,10 @@ public class ContactManagerTest{
 		calArray = new Calendar[testSize];
 		for(int c = 0;c<testSize;c++){
 
-			//Create a random date
-			int year = (int)(Math.random() * 5)+2114;
-			int month = (int)(Math.random() * 12)+ 1;
-			int day = (int)(Math.random() * 28)+ 1;
-			calArray[c] = Calendar.getInstance();
-			calArray[c].set(year,month,day);
+			//Create a random future date
+			
+			calArray[c] = getRandomDate(false);
+		
 		}
 
 
@@ -45,6 +43,28 @@ public class ContactManagerTest{
 			futureMeetingIDs[c] = cm.addFutureMeeting(testContacts,calArray[c]);
 		}
 	}
+	
+	private Calendar getRandomDate(boolean pastDate){
+		Calendar date = null;
+		for(int c = 0;c<testSize;c++){
+
+			//Create a random date
+			date = Calendar.getInstance();
+			int yearOffset = date.get(Calendar.YEAR);
+			if(pastDate){
+				yearOffset = yearOffset  - 100;
+			}else{
+				yearOffset = yearOffset  + 100;
+			}
+			int year = (int)(Math.random() * 5)+yearOffset;
+			int month = (int)(Math.random() * 12)+ 1;
+			int day = (int)(Math.random() * 28)+ 1;
+			
+			date.set(year,month,day);
+		}
+		return date;
+	}
+		
 
 	@Test
 	public void TestsGetFutureMeeting(){
@@ -58,6 +78,19 @@ public class ContactManagerTest{
 		fm = cm.getFutureMeeting(-1);
 		assertEquals(fm,null);
 	}
+	
+	/*@Test
+	public void TestsGetMeeting(){
+		Meeting mg;
+		for(int c = 0; c < testSize; c++){
+			mg = cm.getMeeting(futureMeetingIDs[c]);
+
+			assertEquals(fm.getContacts(),testContacts);
+		}
+		//test for non-existent id
+		fm = cm.getFutureMeeting(-1);
+		assertEquals(fm,null);
+	}*/
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void TestsAddFutureMeetingPastDate(){
