@@ -7,17 +7,17 @@ import java.util.TreeSet;
 * A class to manage your contacts and meetings.
 */
 public class ContactManagerImpl implements ContactManager {
-	
+
 	private List<Meeting> meetings;
 	private Set<Contact> contacts;
-	private int id;
-	
+	private int nextContactId;
+
 	public ContactManagerImpl(){
 		contacts = new TreeSet<>();
-		id = 0;
+		nextContactId = 0;
 	}
-	
-	
+
+
 	/**
 	* Add a new meeting to be held in the future.
 	*
@@ -30,8 +30,8 @@ public class ContactManagerImpl implements ContactManager {
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date){
 		return 0;
 	}
-	
-	
+
+
 	/**
 	* Returns the PAST meeting with the requested ID, or null if it there is none.
 	*
@@ -43,8 +43,8 @@ public class ContactManagerImpl implements ContactManager {
 	public PastMeeting getPastMeeting(int id){
 		return null;
 	}
-	
-	
+
+
 	/**
 	* Returns the FUTURE meeting with the requested ID, or null if there is none.
 	*
@@ -55,8 +55,8 @@ public class ContactManagerImpl implements ContactManager {
 	public FutureMeeting getFutureMeeting(int id){
 		return null;
 	}
-	
-	
+
+
 	/**
 	* Returns the meeting with the requested ID, or null if it there is none.
 	*
@@ -66,8 +66,8 @@ public class ContactManagerImpl implements ContactManager {
 	public Meeting getMeeting(int id){
 		return null;
 	}
-	
-	
+
+
 	/**
 	* Returns the list of future meetings scheduled with this contact.
 	*
@@ -82,8 +82,8 @@ public class ContactManagerImpl implements ContactManager {
 	public List<Meeting> getFutureMeetingList(Contact contact){
 		return null;
 	}
-	
-	
+
+
 	/**
 	* Returns the list of meetings that are scheduled for, or that took
 	* place on, the specified date
@@ -98,8 +98,8 @@ public class ContactManagerImpl implements ContactManager {
 	public List<Meeting> getFutureMeetingList(Calendar date){
 		return null;
 	}
-	
-	
+
+
 	/**
 	* Returns the list of past meetings in which this contact has participated.
 	*
@@ -114,8 +114,8 @@ public class ContactManagerImpl implements ContactManager {
 	public List<PastMeeting> getPastMeetingList(Contact contact){
 		return null;
 	}
-	
-	
+
+
 	/**
 	* Create a new record for a meeting that took place in the past.
 	*
@@ -129,8 +129,8 @@ public class ContactManagerImpl implements ContactManager {
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
 		;
 	}
-	
-	
+
+
 	/**
 	* Add notes to a meeting.
 	*
@@ -148,8 +148,8 @@ public class ContactManagerImpl implements ContactManager {
 	public void addMeetingNotes(int id, String text){
 		;
 	}
-	
-	
+
+
 	/**
 	* Create a new contact with the specified name and notes.
 	*
@@ -162,15 +162,15 @@ public class ContactManagerImpl implements ContactManager {
 		if(notes == null || name == null){
 			throw new NullPointerException("Either name or notes is null");
 		}else{
-			id++;
+			nextContactId++;
 			cn = new ContactImpl(id,name);
 			cn.addNotes(notes);
 		}
 		contacts.add(cn);
-			
+
 	}
-	
-	
+
+
 	/**
 	* Returns a list containing the contacts that correspond to the IDs.
 	*
@@ -186,19 +186,19 @@ public class ContactManagerImpl implements ContactManager {
 			contactNotFound = true;
 			for(Contact contact : contacts){
 				if(contact.getId() == ids[c]){
-						cns.add(contact);
-						contactNotFound = false;
+					cns.add(contact);
+					contactNotFound = false;
 				}
 			}
 			if(contactNotFound){
 				throw new IllegalArgumentException();
-					
+
 			}
 		}
 		return cns;
 	}
-	
-	
+
+
 	/**
 	* Returns a list with the contacts whose name contains that string.
 	*
@@ -207,10 +207,26 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws NullPointerException if the parameter is null
 	*/
 	public Set<Contact> getContacts(String name){
-		return null;
+		boolean contactNotFound = false;
+		Set<Contact> cns = new TreeSet<>();
+		//search for incidence of name in contacts list
+
+		contactNotFound = true;
+		for(Contact contact : contacts){
+			if((contact.getName()).equals(name)){
+				cns.add(contact);
+				contactNotFound = false;
+			}
+		}
+		if(contactNotFound){
+			throw new NullPointerException();
+
+		}
+
+		return cns;
 	}
-	
-	
+
+
 	/**
 	* Save all data to disk.
 	*
