@@ -82,7 +82,7 @@ public class ContactManagerImpl implements ContactManager {
 	*/
 	public PastMeeting getPastMeeting(int id){
 		//find meeting with id
-		Meeting returnedMeeting;
+		Meeting returnedMeeting = null;
 		boolean meetingFound = false;
 		for(Meeting meeting : meetings){
 			if(id == meeting.getId()){
@@ -101,16 +101,17 @@ public class ContactManagerImpl implements ContactManager {
 		}else{
 			//if it is not in the future, but it is a futureMeeting,
 			//then create a pastMeeting in its place.
-			if(returnedMeeting instanceOf PastMeetingImpl){
-				return returnedMeeting;
-			}else if(returnedMeeting instance of FutureMeetingImpl){
+			if(returnedMeeting instanceof PastMeetingImpl){
+				return (PastMeetingImpl)returnedMeeting;
+			}else if(returnedMeeting instanceof FutureMeetingImpl){
 				Calendar mtDate = returnedMeeting.getDate();
 				Set<Contact> mtContacts = returnedMeeting.getContacts();
 				meetings.remove(returnedMeeting);
-				Meeting updatedMeeting = new PastMeetingImpl(id,mtDate,mtContacts,null);
+				PastMeetingImpl updatedMeeting = new PastMeetingImpl(id,mtDate,mtContacts,null);
 				meetings.add(updatedMeeting);
 				return updatedMeeting;
 			}
+		}
 		
 		
 		return null;
