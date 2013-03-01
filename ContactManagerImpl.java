@@ -87,7 +87,7 @@ public class ContactManagerImpl implements ContactManager {
 		for(Meeting meeting : meetings){
 			if(id == meeting.getId()){
 				meetingFound = true;
-				
+
 				returnedMeeting = meeting;
 			}
 		}
@@ -112,8 +112,8 @@ public class ContactManagerImpl implements ContactManager {
 				return updatedMeeting;
 			}
 		}
-		
-		
+
+
 		return null;
 	}
 
@@ -126,7 +126,29 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws IllegalArgumentException if there is a meeting with that ID happening in the past
 	*/
 	public FutureMeeting getFutureMeeting(int id){
-		return null;
+		Meeting returnedMeeting = null;
+		boolean meetingFound = false;
+		for(Meeting meeting : meetings){
+			if(id == meeting.getId()){
+				meetingFound = true;
+
+				returnedMeeting = meeting;
+			}
+		}
+		if(!meetingFound){
+			//meeting not found
+			return null;
+		}
+		if((Calendar.getInstance()).after(returnedMeeting.getDate())){
+			throw new IllegalArgumentException("Meeting found has a past date.");
+		}else{
+			//if it is not in the future, but it is a futureMeeting,
+			//then create a pastMeeting in its place.
+			if(returnedMeeting instanceof FutureMeetingImpl){
+				return (FutureMeetingImpl)returnedMeeting;
+			}
+			return null;
+		}
 	}
 
 
