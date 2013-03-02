@@ -1,4 +1,6 @@
-public class ContactImpl implements Contact, Comparable<Contact> {
+import java.io.*;
+
+public class ContactImpl implements Contact, Comparable<Contact>, Serializable {
 	
 	private int id;
 	private String name;
@@ -6,6 +8,17 @@ public class ContactImpl implements Contact, Comparable<Contact> {
 	
 	public ContactImpl(int id, String name){
 		this.id = id;
+		this.name = name;
+	}
+	
+	public ContactImpl(){
+	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
+	
+	public void setName(int id){
 		this.name = name;
 	}
 	
@@ -61,6 +74,10 @@ public class ContactImpl implements Contact, Comparable<Contact> {
 			result = 1;
 		}
 		return result;
+	}
+	
+	public String toString(){
+		return name;
 	}
 			
 }

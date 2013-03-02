@@ -58,6 +58,8 @@ public class ContactManagerTest{
 		for(int c = testSize/2 + 1;c < testSize;c++){
 			cm.addNewPastMeeting(testContacts,calArray[c],"" + c);
 		}
+		
+		
 	}
 
 	private Calendar getRandomDate(boolean pastDate){
@@ -300,6 +302,7 @@ public class ContactManagerTest{
 
 	@After
 	public void CleanUp(){
+		//cm.flush();
 		testContacts = null;
 		calArray= null;
 		cm = null;

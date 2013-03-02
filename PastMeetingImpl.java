@@ -23,6 +23,10 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting{
 		this.notes = notes;
 	}
 	
+	public PastMeetingImpl(){
+	}
+		
+	
 	/**
 	* Returns the notes from the meeting.
 	*

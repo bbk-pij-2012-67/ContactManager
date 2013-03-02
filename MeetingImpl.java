@@ -1,12 +1,13 @@
 import java.util.Calendar;
 import java.util.Set;
+import java.io.*;
 
 /**
 * A class to represent meetings
 *
 * Meetings have unique IDs, scheduled date and a list of participating contacts
 */
-public class MeetingImpl implements Meeting, Comparable<Meeting>{
+public class MeetingImpl implements Meeting, Comparable<Meeting>, Serializable {
 	
 	private int id;
 	private Calendar date;
@@ -22,6 +23,21 @@ public class MeetingImpl implements Meeting, Comparable<Meeting>{
 	public MeetingImpl(int id, Calendar date, Set<Contact> contacts){
 		this.id = id;
 		this.date = date;
+		this.contacts = contacts;
+	}
+	
+	public MeetingImpl(){
+	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
+	
+	public void setDate(Calendar date){
+		this.date = date;
+	}
+	
+	public void setContacts(Set<Contact> contacts){
 		this.contacts = contacts;
 	}
 	

@@ -3,23 +3,68 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
-
+import java.io.FileOutputStream;
+import java.beans.XMLEncoder;
+import java.io.FileNotFoundException;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.*;
 /**
 * A class to manage your contacts and meetings.
 */
-public class ContactManagerImpl implements ContactManager {
+public class ContactManagerImpl implements ContactManager, Serializable {
 
-	private List<Meeting> meetings;
-	private Set<Contact> contacts;
+	private List<Meeting> meetings = new LinkedList<>();
+	private Set<Contact> contacts = new TreeSet<>();
 	private int nextContactId;
 	private int nextMeetingId;
 
 	public ContactManagerImpl(){
-		contacts = new TreeSet<>();
-		nextContactId = 0;
-		nextMeetingId = 0;
-		meetings = new LinkedList<>();
+		//contacts = new TreeSet<>();
+		//nextContactId = 0;
+		//nextMeetingId = 0;
+		//meetings = new LinkedList<>();
 	}
+	
+	public ContactManagerImpl(List<Meeting> meetings,Set<Contact> contacts, int nextContactId, int nextMeetingId){
+		this.contacts = contacts;
+		this.nextContactId = nextContactId;
+		this.nextMeetingId = nextMeetingId;
+		this.meetings = meetings;
+	}
+	
+	public List<Meeting> getMeetings(){
+		return meetings;
+	}
+	
+	public void setMeetings(List<Meeting> meetings){
+		this.meetings = meetings;
+	}
+	public void setContacts(Set<Contact> contacts){
+		this.contacts = contacts;
+	}
+	
+	public Set<Contact> getContacts(){
+		return contacts;
+	}
+	
+	public int getNextContactId(){
+		return nextContactId;
+	}
+	
+	public void setNextContactId(){
+		this.nextContactId = nextContactId;
+	}
+	
+	public void setNextMeetingId(){
+		this.nextMeetingId = nextMeetingId;
+	}
+	
+	public int getNextMeetingId(){
+		return nextMeetingId;
+	}
+	
+	
 
 
 	/**
@@ -435,6 +480,26 @@ public class ContactManagerImpl implements ContactManager {
 	* closed and when/if the user requests it.
 	*/
 	public void flush(){
-		;
+		//ObjectSaver.save(this);
+		XMLEncoder xml = null;
+		BufferedOutputStream bos = null;
+		try{
+			FileOutputStream fos = new FileOutputStream("ConManager.xml");
+			 bos = new BufferedOutputStream(fos);
+			xml = new XMLEncoder(bos);
+			xml.writeObject(this);
+
+		}catch(FileNotFoundException fnfe){
+		//}catch(IOException ie){
+		}finally{
+			
+			xml.close();
+			
+		}
+
 	}
+
+
 }
+
+

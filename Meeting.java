@@ -1,12 +1,13 @@
 import java.util.Calendar;
 import java.util.Set;
+import java.io.*;
 
 /**
 * A class to represent meetings
 *
 * Meetings have unique IDs, scheduled date and a list of participating contacts
 */
-public interface Meeting {
+public interface Meeting extends Serializable{
 	/**
 	* Returns the id of the meeting.
 	*
