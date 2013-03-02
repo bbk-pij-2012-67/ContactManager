@@ -6,7 +6,7 @@ import java.util.Set;
 *
 * Meetings have unique IDs, scheduled date and a list of participating contacts
 */
-public class MeetingImpl implements Meeting{
+public class MeetingImpl implements Meeting, Comparable<Meeting>{
 	
 	private int id;
 	private Calendar date;
@@ -55,5 +55,17 @@ public class MeetingImpl implements Meeting{
 	*/
 	public Set<Contact> getContacts(){
 		return contacts;
+	}
+	
+	@Override
+	public int compareTo(Meeting m){
+		if((this.getDate()).before(m.getDate())){
+				return -1;
+		}
+		if ((this.getDate()).after(m.getDate())){
+				return 1;
+		}else{
+			return 0;
+		}
 	}
 }

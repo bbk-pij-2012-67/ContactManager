@@ -161,6 +161,11 @@ public class ContactManagerImpl implements ContactManager {
 	* @return the meeting with the requested ID, or null if it there is none.
 	*/
 	public Meeting getMeeting(int id){
+		for(Meeting meeting : meetings){
+			if(meeting.getId() == id){
+				return meeting;
+			}
+		}
 		return null;
 	}
 

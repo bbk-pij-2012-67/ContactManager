@@ -176,6 +176,11 @@ public class ContactManagerTest{
 		}
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void testsGetFutureMeetingListByContactNotExisting(){
+		cm.getFutureMeetingList(new Contact(-10,"q"));
+	}
+	
 	@Test
 	public void testsGetFutureMeetingListByDate(){
 		Set<Contact> contacts;
