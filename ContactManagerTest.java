@@ -227,6 +227,13 @@ public class ContactManagerTest{
 		}
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void testsGetPastMeetingListContactNotExisting(){
+		Contact cn = new ContactImpl(1,"a");
+		cm.getPastMeetingList(cn);
+	}
+		
+	
 	@Test
 	public void testsAddMeetingNotes(){
 		List<PastMeeting> pMeetings = null; 
@@ -234,10 +241,10 @@ public class ContactManagerTest{
 		cm.addNewContact("Edmund White","");
 		contacts = cm.getContacts("Edmund White");
 		Calendar pastDate = Calendar.getInstance();
-		Calendar futureDate = Calendar.getInstance();
+		//Calendar futureDate = Calendar.getInstance();
 		pastDate.set(1980,12,12);
 		cm.addNewPastMeeting(contacts,pastDate,"");
-		futureDate.set(2012,12,12);
+		//futureDate.set(2012,12,12);
 		int pastMeetingId = 0;
 		//get the past meeting id
 		for(Contact contact : contacts){
@@ -247,16 +254,16 @@ public class ContactManagerTest{
 			pastMeetingId = pMeeting.getId();
 		}
 		
-		int futureMeetingId = cm.addFutureMeeting(contacts,futureDate);
+		//int futureMeetingId = cm.addFutureMeeting(contacts,futureDate);
 		cm.addMeetingNotes(pastMeetingId,"This was a PastMeeting");
-		cm.addMeetingNotes(futureMeetingId,"This was a FutureMeeting");
+		//cm.addMeetingNotes(futureMeetingId,"This was a FutureMeeting");
 		
 		//retrieve meetings. Future meeting should be converted to past meeting
 		PastMeeting pm = cm.getPastMeeting(pastMeetingId);
-		PastMeeting fpm = cm.getPastMeeting(futureMeetingId);
+		//PastMeeting fpm = cm.getPastMeeting(futureMeetingId);
 		
 		assertTrue((pm.getNotes()).equals("This was a PastMeeting"));
-		assertTrue((fpm.getNotes()).equals("This was a FutureMeeting"));
+		//assertTrue((fpm.getNotes()).equals("This was a FutureMeeting"));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -264,7 +271,7 @@ public class ContactManagerTest{
 		cm.addMeetingNotes(-1,"a");
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=IllegalStateException.class)
 	public void testsAddMeetingNotesMeetingInFuture(){
 		cm.addMeetingNotes(meetingIDs[0],"a");
 	}

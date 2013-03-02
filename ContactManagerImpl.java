@@ -182,9 +182,13 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws IllegalArgumentException if the contact does not exist
 	*/
 	public List<Meeting> getFutureMeetingList(Contact contact){
-		
+		Set<Contact> myContacts = new TreeSet<>();
+		myContacts.add(contact);
+		if(!contactsAreValid(myContacts)){
+			throw new IllegalArgumentException();
+		}
 		List<Meeting> fMeetings = new LinkedList<Meeting>();
-		
+
 		for(Meeting meeting : meetings){
 			if(meeting instanceof FutureMeetingImpl){
 				Set<Contact> rtContacts = meeting.getContacts();
@@ -243,9 +247,13 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws IllegalArgumentException if the contact does not exist
 	*/
 	public List<PastMeeting> getPastMeetingList(Contact contact){
-		
+		Set<Contact> myContacts = new TreeSet<>();
+		myContacts.add(contact);
+		if(!contactsAreValid(myContacts)){
+			throw new IllegalArgumentException();
+		}
 		List<PastMeeting> pMeetings = new LinkedList<>();
-		
+
 		for(Meeting meeting : meetings){
 			if(meeting instanceof PastMeetingImpl){
 				Set<Contact> rtContacts = meeting.getContacts();
@@ -261,7 +269,7 @@ public class ContactManagerImpl implements ContactManager {
 		}else{
 			return pMeetings;
 		}
-	
+
 	}
 
 
@@ -307,7 +315,28 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws NullPointerException if the notes are null
 	*/
 	public void addMeetingNotes(int id, String text){
-		;
+		Meeting mt = getMeeting(id);
+		if(mt == null){
+			throw new IllegalArgumentException("Meeting does not exist.");
+		}
+		if((mt.getDate()).after(Calendar.getInstance())){
+			throw new IllegalStateException("Notes cannot be added to future meeting.");
+		}
+		if(text == null){
+			throw new NullPointerException("Attempted to pass notes of null value");
+		}
+
+		if(mt instanceof FutureMeeting){
+			Calendar mtDate = mt.getDate();
+			Set<Contact> mtContacts = mt.getContacts();
+			meetings.remove(mt);
+			PastMeetingImpl updatedMeeting = new PastMeetingImpl(id,mtDate,mtContacts,text);
+			meetings.add(updatedMeeting);
+
+		}else{
+			((PastMeetingImpl)(mt)).addNotes(text);
+		}
+
 	}
 
 
