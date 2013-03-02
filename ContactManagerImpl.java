@@ -224,7 +224,18 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws NullPointerException if any of the arguments is null
 	*/
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text){
-		;
+		if(contacts.isEmpty()){
+			throw new IllegalArgumentException();
+		}
+		if(!contactsAreValid(contacts)){
+			throw new IllegalArgumentException();
+		}
+		if(contacts == null || date == null || text == null){
+			throw new NullPointerException();
+		}
+		nextMeetingId++;
+		PastMeeting pm = new PastMeetingImpl(nextMeetingId,date,contacts,text);
+		meetings.add(pm);
 	}
 
 
@@ -328,6 +339,7 @@ public class ContactManagerImpl implements ContactManager {
 		for(Meeting meeting : meetings){
 			if(meeting instanceof PastMeetingImpl){
 				ids.add(meeting.getId());
+				//System.out.println(meeting.getId());
 			}
 		}
 		return ids;
