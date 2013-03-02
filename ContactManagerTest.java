@@ -12,12 +12,12 @@ public class ContactManagerTest{
 	private Calendar[] calArray;
 	private int testSize;
 	ContactManager cm;
-	private int[] MeetingIDs;
+	private int[] meetingIDs;
 
 	@Before
 	public void initialize(){
 		testSize = 100;
-		MeetingIDs = new int[testSize];
+		meetingIDs = new int[testSize];
 		cm = new ContactManagerImpl();
 		//Create a set of contacts
 		testContacts = new TreeSet<Contact>();
@@ -44,7 +44,7 @@ public class ContactManagerTest{
 
 		//Create FutureMeeting objects
 		for(int c = 0; c < testSize/2; c++){
-			MeetingIDs[c] = cm.addFutureMeeting(testContacts,calArray[c]);
+			meetingIDs[c] = cm.addFutureMeeting(testContacts,calArray[c]);
 		}
 		//Create PastMeeting objects
 		for(int c = testSize/2 + 1;c < testSize;c++){
@@ -78,7 +78,7 @@ public class ContactManagerTest{
 	public void TestsGetFutureMeeting(){
 		FutureMeeting fm;
 		for(int c = 0; c < testSize/2; c++){
-			fm = cm.getFutureMeeting(MeetingIDs[c]);
+			fm = cm.getFutureMeeting(meetingIDs[c]);
 
 			assertEquals(fm.getContacts(),testContacts);
 		}
@@ -205,25 +205,36 @@ public class ContactManagerTest{
 		//create a future meeting
 		Calendar date = Calendar.getInstance();
 		date.set(1980,12,12);
-		int meetingId = cm.addNewPastMeeting(contacts,date,"");
+		cm.addNewPastMeeting(contacts,date,"");
 		for(Contact contact : contacts){
 			List<PastMeeting> meetings = cm.getPastMeetingList(contact);
 			for(Meeting meeting : meetings){			
-					assertEquals(meetingId,meeting.getId());				
+					assertTrue((meeting.getDate()).equals(date));				
 			}
 		}
 	}
 	
 	@Test
 	public void testsAddMeetingNotes(){
+		List<PastMeeting> pMeetings = null; 
 		Set<Contact> contacts;
 		cm.addNewContact("Edmund White","");
 		contacts = cm.getContacts("Edmund White");
-		Calendar date = Calendar.getInstance();
-		date.set(1980,12,12);
-		int pastMeetingId = cm.addNewPastMeeting(contacts,date,"");
-		date.set(2012,12,12);
-		int futureMeetingId = cm.addFutureMeeting(contacts,date);
+		Calendar pastDate = Calendar.getInstance();
+		Calendar futureDate = Calendar.getInstance();
+		pastDate.set(1980,12,12);
+		cm.addNewPastMeeting(contacts,pastDate,"");
+		futureDate.set(2012,12,12);
+		int pastMeetingId = 0;
+		//get the past meeting id
+		for(Contact contact : contacts){
+		pMeetings = cm.getPastMeetingList(contact);
+		}
+		for(PastMeeting pMeeting : pMeetings){
+			pastMeetingId = pMeeting.getId();
+		}
+		
+		int futureMeetingId = cm.addFutureMeeting(contacts,futureDate);
 		cm.addMeetingNotes(pastMeetingId,"This was a PastMeeting");
 		cm.addMeetingNotes(futureMeetingId,"This was a FutureMeeting");
 		
@@ -231,13 +242,40 @@ public class ContactManagerTest{
 		PastMeeting pm = cm.getPastMeeting(pastMeetingId);
 		PastMeeting fpm = cm.getPastMeeting(futureMeetingId);
 		
-		assertTrue((pm.getNotes()).equals("This was a PastMeeting");
-		assertTrue((fpm.getNotes()).equals("This was a FutureMeeting");
+		assertTrue((pm.getNotes()).equals("This was a PastMeeting"));
+		assertTrue((fpm.getNotes()).equals("This was a FutureMeeting"));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testsAddMeetingNotesMeetingNonExistent(){
 		cm.addMeetingNotes(-1,"a");
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testsAddMeetingNotesMeetingInFuture(){
+		cm.addMeetingNotes(meetingIDs[0],"a");
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testsAddMeetingNotesWhenNull(){
+		Set<Contact> contacts;
+		cm.addNewContact("Edmund White","");
+		contacts = cm.getContacts("Edmund White");
+		Calendar date = Calendar.getInstance();
+		date.set(1980,12,12);
+		int pastMeetingId = 0;
+		List<PastMeeting> pMeetings = null;
+		//get the past meeting id
+		for(Contact contact : contacts){
+		pMeetings = cm.getPastMeetingList(contact);
+		}
+		for(PastMeeting pMeeting : pMeetings){
+			pastMeetingId = pMeeting.getId();
+		}
+		
+		cm.addNewPastMeeting(contacts,date,"");
+		cm.addMeetingNotes(pastMeetingId,null);
+		
 	}
 
 	@After
@@ -245,6 +283,6 @@ public class ContactManagerTest{
 		testContacts = null;
 		calArray= null;
 		cm = null;
-		MeetingIDs = null;
+		meetingIDs = null;
 	}
 }
