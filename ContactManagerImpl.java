@@ -150,8 +150,8 @@ public class ContactManagerImpl implements ContactManager {
 			return null;
 		}
 	}
-	
-	
+
+
 
 
 	/**
@@ -182,7 +182,9 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws IllegalArgumentException if the contact does not exist
 	*/
 	public List<Meeting> getFutureMeetingList(Contact contact){
-		List<Meeting> fMeetings = new LinkedList<>();
+		
+		List<Meeting> fMeetings = new LinkedList<Meeting>();
+		
 		for(Meeting meeting : meetings){
 			if(meeting instanceof FutureMeetingImpl){
 				Set<Contact> rtContacts = meeting.getContacts();
@@ -213,7 +215,19 @@ public class ContactManagerImpl implements ContactManager {
 	* @return the list of meetings
 	*/
 	public List<Meeting> getFutureMeetingList(Calendar date){
-		return null;
+		List<Meeting> fMeetings = new LinkedList<>();
+		for(Meeting meeting : meetings){
+			if(meeting instanceof FutureMeetingImpl){
+				if((meeting.getDate()).equals(date)){
+					fMeetings.add(meeting);
+				}
+			}
+		}
+		if (fMeetings.isEmpty()){
+			return null;
+		}else{
+			return fMeetings;
+		}
 	}
 
 
@@ -229,8 +243,27 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws IllegalArgumentException if the contact does not exist
 	*/
 	public List<PastMeeting> getPastMeetingList(Contact contact){
-		return null;
+		
+		List<PastMeeting> pMeetings = new LinkedList<>();
+		
+		for(Meeting meeting : meetings){
+			if(meeting instanceof PastMeetingImpl){
+				Set<Contact> rtContacts = meeting.getContacts();
+				for(Contact rtContact : rtContacts){
+					if(rtContact == contact){
+						pMeetings.add((PastMeetingImpl)meeting);
+					}
+				}
+			}
+		}
+		if (pMeetings.isEmpty()){
+			return null;
+		}else{
+			return pMeetings;
+		}
+	
 	}
+
 
 
 	/**
@@ -353,7 +386,7 @@ public class ContactManagerImpl implements ContactManager {
 
 		return cns;
 	}
-	
+
 	public List<Integer> getPastMeetingIDs(){
 		List<Integer> ids = new LinkedList<>();
 		for(Meeting meeting : meetings){
