@@ -54,10 +54,10 @@ public class ContactManagerImpl implements ContactManager {
 		//Check if each contact is valid
 		for(Contact contact : contacts){
 			contactNotFound = true;
-			int id = contact.getId();
-			String name = contact.getName();
+			//int id = contact.getId();
+			//String name = contact.getName();
 			for(Contact mContact : this.contacts){
-				if(mContact.getId() == id && (mContact.getName()).equals(name)){
+				if(mContact == contact){
 					contactNotFound = false;
 					//result = true;
 				}
@@ -182,7 +182,22 @@ public class ContactManagerImpl implements ContactManager {
 	* @throws IllegalArgumentException if the contact does not exist
 	*/
 	public List<Meeting> getFutureMeetingList(Contact contact){
-		return null;
+		List<Meeting> fMeetings = new LinkedList<>();
+		for(Meeting meeting : meetings){
+			if(meeting instanceof FutureMeetingImpl){
+				Set<Contact> rtContacts = meeting.getContacts();
+				for(Contact rtContact : rtContacts){
+					if(rtContact == contact){
+						fMeetings.add(meeting);
+					}
+				}
+			}
+		}
+		if (fMeetings.isEmpty()){
+			return null;
+		}else{
+			return fMeetings;
+		}
 	}
 
 

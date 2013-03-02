@@ -24,8 +24,15 @@ public class ContactManagerTest{
 		for(int c = 0;c < 10;c++){
 			//Create a test list and add identical contacts
 			//assume that IDs in the manager start from 1.
-			testContacts.add(new ContactImpl(c + 1,"" + c));
+			//testContacts.add(new ContactImpl(c + 1,"" + c));
 			cm.addNewContact("" + c,"" + c + c);
+			
+		}
+		for(int c = 0; c < 10 ; c++){
+			Set<Contact> cts = cm.getContacts("" + c);
+			for(Contact ct : cts){
+				testContacts.add(ct);
+			}
 		}
 
 		//Store some dates in an array.
@@ -44,6 +51,7 @@ public class ContactManagerTest{
 
 		//Create FutureMeeting objects
 		for(int c = 0; c < testSize/2; c++){
+				
 			meetingIDs[c] = cm.addFutureMeeting(testContacts,calArray[c]);
 		}
 		//Create PastMeeting objects
@@ -178,7 +186,7 @@ public class ContactManagerTest{
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testsGetFutureMeetingListByContactNotExisting(){
-		cm.getFutureMeetingList(new Contact(-10,"q"));
+		cm.getFutureMeetingList(new ContactImpl(-10,"q"));
 	}
 	
 	@Test
