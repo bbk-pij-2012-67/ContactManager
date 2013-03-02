@@ -197,7 +197,22 @@ public class ContactManagerTest{
 		}
 	}
 
-
+	@Test
+	public void testsGetPastMeetingList(){
+		Set<Contact> contacts;
+		cm.addNewContact("Edmund White","");
+		contacts = cm.getContacts("Edmund White");
+		//create a future meeting
+		Calendar date = Calendar.getInstance();
+		date.set(1980,12,12);
+		int meetingId = cm.addNewPastMeeting(contacts,date,"");
+		for(Contact contact : contacts){
+			List<PastMeeting> meetings = cm.getPastMeetingList(contact);
+			for(Meeting meeting : meetings){			
+					assertEquals(meetingId,meeting.getId());				
+			}
+		}
+	}
 
 	@After
 	public void CleanUp(){
