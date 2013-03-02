@@ -213,6 +213,32 @@ public class ContactManagerTest{
 			}
 		}
 	}
+	
+	@Test
+	public void testsAddMeetingNotes(){
+		Set<Contact> contacts;
+		cm.addNewContact("Edmund White","");
+		contacts = cm.getContacts("Edmund White");
+		Calendar date = Calendar.getInstance();
+		date.set(1980,12,12);
+		int pastMeetingId = cm.addNewPastMeeting(contacts,date,"");
+		date.set(2012,12,12);
+		int futureMeetingId = cm.addFutureMeeting(contacts,date);
+		cm.addMeetingNotes(pastMeetingId,"This was a PastMeeting");
+		cm.addMeetingNotes(futureMeetingId,"This was a FutureMeeting");
+		
+		//retrieve meetings. Future meeting should be converted to past meeting
+		PastMeeting pm = cm.getPastMeeting(pastMeetingId);
+		PastMeeting fpm = cm.getPastMeeting(futureMeetingId);
+		
+		assertTrue((pm.getNotes()).equals("This was a PastMeeting");
+		assertTrue((fpm.getNotes()).equals("This was a FutureMeeting");
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testsAddMeetingNotesMeetingNonExistent(){
+		cm.addMeetingNotes(-1,"a");
+	}
 
 	@After
 	public void CleanUp(){
