@@ -109,7 +109,7 @@ public class ConManager{
 		String str;
 		while(true){
 			do{
-				System.out.println("\nSelect: [L]-List Meetings by Date [A]-Add Meeting [M]-List All Meetings [N]-Add Notes [S]-Save [P]-Previous Menu [Q]-Quit");
+				System.out.println("\nSelect: [L]-List Future Meetings by Date [A]-Add Meeting [M]-List All Meetings [N]-Add Notes [S]-Save [P]-Previous Menu [Q]-Quit");
 				str = System.console().readLine();
 				str = str.toLowerCase();
 			}while(!str.equals("l") && !str.equals("a") && !str.equals("m") && !str.equals("n") && !str.equals("s") && !str.equals("p") && !str.equals("q"));
@@ -166,30 +166,97 @@ public class ConManager{
 		}catch(NumberFormatException nf){
 			//not a number
 		}
+		Set<Contact> contacts;
 		if(id != 0){
-			Set<Contact> contacts = cm.getContacts(id);
-			for(Contact contact : contacts){
-				System.out.println("ID: " + contact.getId() + " " + contact.getName() + " " + contact.getNotes());
-				List<Meeting> fMeetings = cm.getFutureMeetingList(contact);
-				if(fMeetings.size()==0){
-					System.out.println("No meetings");
-				}else{
-					for(Meeting meeting : fMeetings){
-						System.out.println("Meeting due on: " + dfm.format(cm.getFutureMeeting(1).getDate().getTime()) );
-					}
+			contacts = cm.getContacts(id);
+
+		}else{
+			contacts = cm.getContacts(str);
+
+		}
+		printContacts(contacts);
+
+	}
+
+	public void printContacts( Set<Contact> contacts){
+
+		for(Contact contact : contacts){
+			System.out.println("ID: " + contact.getId() + " " + contact.getName() + " " + contact.getNotes());
+			List<Meeting> fMeetings = cm.getFutureMeetingList(contact);
+			if(fMeetings.size()==0){
+				System.out.println("No meetings");
+			}else{
+				for(Meeting meeting : fMeetings){
+					System.out.println("Meeting due on: " + dfm.format(cm.getFutureMeeting(1).getDate().getTime()) );
 				}
 			}
 		}
-	
+
+
+
 	}
 
-	public void listMeetingsByDate(){}
+	public void listMeetingsByDate(){
+		Calendar calDate = Calendar.getInstance();
+		Date dDate;
+		boolean finished = false;
+		do{
 
-	public void addMeeting(){}
+			System.out.println("Enter a date in dd-mm-yyyy format");
+			System.out.println("Year: ");
+			String date = System.console().readLine();
+			try{
+				dDate = dfm.parse(date);
+				calDate.setTime(dDate);
+				finished = true;
+			}catch(ParseException pe){
+				System.out.println("Date is invalid");
+			}
+		}while(!finished);
+		List<Meeting> meetings = cm.getFutureMeetingList(calDate);
+		for(Meeting meeting : meetings){
+			System.out.println("Meeting due on: " + dfm.format(cm.getFutureMeeting(1).getDate().getTime()) );
+			System.out.println("Contacts attending:");
+			Set<Contact> contacts = meeting.getContacts();
+			for(Contact contact : contacts){
+				System.out.println("ID: " + contact.getId() + " " + contact.getName());
+			}
+		}
+	}
+
+
+
+	public void addMeeting(){
+		String str;
+		while(true){
+			do{
+				System.out.println("\nSelect: [P]-Past Meeting [F]-Future Meeting [S]-Save [P]-Previous Menu [Q]-Quit");
+				str = System.console().readLine();
+				str = str.toLowerCase();
+			}while(!str.equals("p") && !str.equals("f") && !str.equals("s") && !str.equals("p") && !str.equals("q"));
+			if(str.equals("q")){
+				quitProgram();
+			}else if(str.equals("p")){
+				addPastMeeting();
+			}else if(str.equals("f")){
+				addFutureMeeting();
+			}else if(str.equals("s")){
+				cm.flush();
+			}else if(str.equals("p")){
+				return;
+			}
+		}
+	}
 
 	public void listAllMeetings(){}
 
 	public void addNotes(){}
+	
+	private void addPastMeeting(){
+	}
+	
+	private void addFutureMeeting(){
+	}
 
 	public void quitProgram(){
 		cm.flush();

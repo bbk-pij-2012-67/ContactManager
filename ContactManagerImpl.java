@@ -82,6 +82,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	*/
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date){
 		//Check if date is in the past.
+		date.set(date.get(Calendar.YEAR),date.get(Calendar.MONTH),date.get(Calendar.DATE));
 		if(date.before(Calendar.getInstance())){
 			throw new IllegalArgumentException("Date is past");
 		}else if(!contactsAreValid(contacts)){
