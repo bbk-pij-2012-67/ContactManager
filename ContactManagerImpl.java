@@ -248,11 +248,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 				}
 			}
 		}
-		if (fMeetings.isEmpty()){
-			return null;
-		}else{
+		
 			return fMeetings;
-		}
+		
 	}
 
 
@@ -399,7 +397,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	public void addNewContact(String name, String notes){
 		Contact cn;
 		if(notes == null || name == null){
-			throw new NullPointerException("Either name or notes is null");
+			throw new NullPointerException("Contact not created. Either name or notes is null");
 		}else{
 			nextContactId++;
 			cn = new ContactImpl(nextContactId,name);

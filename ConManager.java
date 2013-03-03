@@ -5,9 +5,11 @@ import java.io.*;
 import java.io.FileNotFoundException;
 import java.util.Set;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 public class ConManager{
 	ContactManagerImpl cm = null;
+	SimpleDateFormat dfm = new SimpleDateFormat("dd-mm-yyyy");
 
 	public static void main(String[] args){
 		ConManager cnm = new ConManager();
@@ -62,7 +64,7 @@ public class ConManager{
 		while(true){
 
 			do{
-				System.out.println("Select: [C]-Manage Contacts [M]-Manage Meetings [S]-Save [Q]-Quit");
+				System.out.println("\nSelect: [C]-Manage Contacts [M]-Manage Meetings [S]-Save [Q]-Quit");
 				str = System.console().readLine();
 				str = str.toLowerCase();
 			}while(!str.equals("c") && !str.equals("m") && !str.equals("s") && !str.equals("q"));
@@ -83,7 +85,7 @@ public class ConManager{
 		String str;
 		while(true){
 			do{
-				System.out.println("Select: [L]-List Contacts [A]-Add Contacts [F]-Find Contact [S]-Save [P]-Previous Menu [Q]-Quit");
+				System.out.println("\nSelect: [L]-List Contacts [A]-Add Contacts [F]-Find Contact [S]-Save [P]-Previous Menu [Q]-Quit");
 				str = System.console().readLine();
 				str = str.toLowerCase();
 			}while(!str.equals("l") && !str.equals("a") && !str.equals("f") && !str.equals("s") && !str.equals("p") && !str.equals("q"));
@@ -107,7 +109,7 @@ public class ConManager{
 		String str;
 		while(true){
 			do{
-				System.out.println("Select: [L]-List Meetings by Date [A]-Add Meeting [M]-List All Meetings [N]-Add Notes [S]-Save [P]-Previous Menu [Q]-Quit");
+				System.out.println("\nSelect: [L]-List Meetings by Date [A]-Add Meeting [M]-List All Meetings [N]-Add Notes [S]-Save [P]-Previous Menu [Q]-Quit");
 				str = System.console().readLine();
 				str = str.toLowerCase();
 			}while(!str.equals("l") && !str.equals("a") && !str.equals("m") && !str.equals("n") && !str.equals("s") && !str.equals("p") && !str.equals("q"));
@@ -144,15 +146,42 @@ public class ConManager{
 		try{
 			System.out.println("Enter the name of the contact:");
 			String name = System.console().readLine();
+			if(name.length()==0) {name = null;}
 			System.out.println("Enter notes for the contact:");
 			String notes = System.console().readLine();
+			if(notes.length()==0) {notes = null;}
 			cm.addNewContact(name,notes);
 		}catch(NullPointerException np){
 			System.out.println("You must enter a name and notes");
 		}
 	}
 
-	public void findContact(){}
+	public void findContact(){
+		System.out.println("Enter the name or contact id number of the contact you are looking for:");
+		String str = System.console().readLine();
+		int id = 0;
+		//test if response is an integer. if so, search by id
+		try{
+			id = Integer.parseInt(str);
+		}catch(NumberFormatException nf){
+			//not a number
+		}
+		if(id != 0){
+			Set<Contact> contacts = cm.getContacts(id);
+			for(Contact contact : contacts){
+				System.out.println("ID: " + contact.getId() + " " + contact.getName() + " " + contact.getNotes());
+				List<Meeting> fMeetings = cm.getFutureMeetingList(contact);
+				if(fMeetings.size()==0){
+					System.out.println("No meetings");
+				}else{
+					for(Meeting meeting : fMeetings){
+						System.out.println("Meeting due on: " + dfm.format(cm.getFutureMeeting(1).getDate().getTime()) );
+					}
+				}
+			}
+		}
+	
+	}
 
 	public void listMeetingsByDate(){}
 
