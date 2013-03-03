@@ -489,7 +489,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		XMLEncoder xml = null;
 		ObjectOutputStream bos = null;
 		try{
-			FileOutputStream fos = new FileOutputStream("ConManager.xml");
+			FileOutputStream fos = new FileOutputStream("contacts.txt");
 			bos = new ObjectOutputStream(fos);
 			xml = new XMLEncoder(bos);
 			xml.writeObject(this);
