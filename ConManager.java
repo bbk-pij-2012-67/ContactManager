@@ -67,9 +67,7 @@ public class ConManager{
 				str = str.toLowerCase();
 			}while(!str.equals("c") && !str.equals("m") && !str.equals("s") && !str.equals("q"));
 			if(str.equals("q")){
-				cm.flush();
-				System.out.println("Goodbye.");
-				System.exit(0);
+				quitProgram();
 			}else if(str.equals("c")){
 				contactsMenu();
 			}else if(str.equals("m")){
@@ -90,8 +88,7 @@ public class ConManager{
 				str = str.toLowerCase();
 			}while(!str.equals("l") && !str.equals("a") && !str.equals("f") && !str.equals("s") && !str.equals("p") && !str.equals("q"));
 			if(str.equals("q")){
-				cm.flush();
-				System.exit(0);
+				quitProgram();
 			}else if(str.equals("l")){
 				listContacts();
 			}else if(str.equals("a")){
@@ -115,8 +112,7 @@ public class ConManager{
 				str = str.toLowerCase();
 			}while(!str.equals("l") && !str.equals("a") && !str.equals("m") && !str.equals("n") && !str.equals("s") && !str.equals("p") && !str.equals("q"));
 			if(str.equals("q")){
-				cm.flush();
-				System.exit(0);
+				quitProgram();
 			}else if(str.equals("l")){
 				listMeetingsByDate();
 			}else if(str.equals("a")){
@@ -133,7 +129,16 @@ public class ConManager{
 		}
 	}
 
-	public void listContacts(){}
+	public void listContacts(){
+		Set<Contact> contacts = ((ContactManagerImpl)(cm)).getContacts();
+		if(contacts.size()!=0){
+		for(Contact contact : contacts){
+			System.out.println("ID: " + contact.getId() + " " + contact.getName());
+		}
+		}else{
+			System.out.println("You currently have no contacts\n");
+		}
+	}
 
 	public void addContact(){}
 
@@ -146,6 +151,12 @@ public class ConManager{
 	public void listAllMeetings(){}
 	
 	public void addNotes(){}
+	
+	public void quitProgram(){
+		cm.flush();
+				System.out.println("Goodbye.");
+				System.exit(0);
+	}
 	
 	
 }
