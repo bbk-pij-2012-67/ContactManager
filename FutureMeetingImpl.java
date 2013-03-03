@@ -12,7 +12,7 @@ public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting{
 		super(id,date,contacts);
 	}
 	public FutureMeetingImpl(){
-		;
+		
 	}
 	
 

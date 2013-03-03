@@ -4,9 +4,12 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 import java.io.FileOutputStream;
+
 import java.beans.XMLEncoder;
+
 import java.io.FileNotFoundException;
 import java.io.BufferedOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.*;
 /**
@@ -20,51 +23,52 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	private int nextMeetingId;
 
 	public ContactManagerImpl(){
+		
 		//contacts = new TreeSet<>();
 		//nextContactId = 0;
 		//nextMeetingId = 0;
 		//meetings = new LinkedList<>();
 	}
-	
-	public ContactManagerImpl(List<Meeting> meetings,Set<Contact> contacts, int nextContactId, int nextMeetingId){
-		this.contacts = contacts;
-		this.nextContactId = nextContactId;
-		this.nextMeetingId = nextMeetingId;
-		this.meetings = meetings;
-	}
-	
+
+	//public ContactManagerImpl(List<Meeting> meetings,Set<Contact> contacts, int nextContactId, int nextMeetingId){
+	//	this.contacts = contacts;
+	//	this.nextContactId = nextContactId;
+	//	this.nextMeetingId = nextMeetingId;
+	//	this.meetings = meetings;
+	//}
+
 	public List<Meeting> getMeetings(){
 		return meetings;
 	}
-	
+
 	public void setMeetings(List<Meeting> meetings){
 		this.meetings = meetings;
 	}
 	public void setContacts(Set<Contact> contacts){
 		this.contacts = contacts;
 	}
-	
+
 	public Set<Contact> getContacts(){
 		return contacts;
 	}
-	
+
 	public int getNextContactId(){
 		return nextContactId;
 	}
-	
-	public void setNextContactId(){
+
+	public void setNextContactId(int nextContactId){
 		this.nextContactId = nextContactId;
 	}
-	
-	public void setNextMeetingId(){
+
+	public void setNextMeetingId(int nextMeetingId){
 		this.nextMeetingId = nextMeetingId;
 	}
-	
+
 	public int getNextMeetingId(){
 		return nextMeetingId;
 	}
-	
-	
+
+
 
 
 	/**
@@ -400,8 +404,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			nextContactId++;
 			cn = new ContactImpl(nextContactId,name);
 			cn.addNotes(notes);
+			contacts.add(cn);
 		}
-		contacts.add(cn);
+		
 
 	}
 
@@ -454,7 +459,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			}
 		}
 		if(contactNotFound){
-			throw new NullPointerException();
+			throw new NullPointerException("Contact not found");
 
 		}
 
@@ -482,19 +487,19 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	public void flush(){
 		//ObjectSaver.save(this);
 		XMLEncoder xml = null;
-		BufferedOutputStream bos = null;
+		ObjectOutputStream bos = null;
 		try{
 			FileOutputStream fos = new FileOutputStream("ConManager.xml");
-			 bos = new BufferedOutputStream(fos);
+			bos = new ObjectOutputStream(fos);
 			xml = new XMLEncoder(bos);
 			xml.writeObject(this);
 
 		}catch(FileNotFoundException fnfe){
-		//}catch(IOException ie){
+			}catch(IOException ie){
 		}finally{
-			
+
 			xml.close();
-			
+
 		}
 
 	}

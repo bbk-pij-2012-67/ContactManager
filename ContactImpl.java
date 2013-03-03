@@ -14,11 +14,15 @@ public class ContactImpl implements Contact, Comparable<Contact>, Serializable {
 	public ContactImpl(){
 	}
 	
+	public void setNotes(String note){
+		this.note = note;
+	}
+	
 	public void setId(int id){
 		this.id = id;
 	}
 	
-	public void setName(int id){
+	public void setName(String name){
 		this.name = name;
 	}
 	
