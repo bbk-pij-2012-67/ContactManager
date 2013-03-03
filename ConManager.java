@@ -104,7 +104,7 @@ public class ConManager{
 	}
 
 	public void meetingsMenu(){
-	String str;
+		String str;
 		while(true){
 			do{
 				System.out.println("Select: [L]-List Meetings by Date [A]-Add Meeting [M]-List All Meetings [N]-Add Notes [S]-Save [P]-Previous Menu [Q]-Quit");
@@ -132,33 +132,43 @@ public class ConManager{
 	public void listContacts(){
 		Set<Contact> contacts = ((ContactManagerImpl)(cm)).getContacts();
 		if(contacts.size()!=0){
-		for(Contact contact : contacts){
-			System.out.println("ID: " + contact.getId() + " " + contact.getName());
-		}
+			for(Contact contact : contacts){
+				System.out.println("ID: " + contact.getId() + " " + contact.getName());
+			}
 		}else{
 			System.out.println("You currently have no contacts\n");
 		}
 	}
 
-	public void addContact(){}
+	public void addContact(){
+		try{
+			System.out.println("Enter the name of the contact:");
+			String name = System.console().readLine();
+			System.out.println("Enter notes for the contact:");
+			String notes = System.console().readLine();
+			cm.addNewContact(name,notes);
+		}catch(NullPointerException np){
+			System.out.println("You must enter a name and notes");
+		}
+	}
 
 	public void findContact(){}
-	
+
 	public void listMeetingsByDate(){}
-	
+
 	public void addMeeting(){}
-	
+
 	public void listAllMeetings(){}
-	
+
 	public void addNotes(){}
-	
+
 	public void quitProgram(){
 		cm.flush();
-				System.out.println("Goodbye.");
-				System.exit(0);
+		System.out.println("Goodbye.");
+		System.exit(0);
 	}
-	
-	
+
+
 }
 
 //public void
