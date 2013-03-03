@@ -187,7 +187,7 @@ public class ConManager{
 				System.out.println("No meetings");
 			}else{
 				for(Meeting meeting : fMeetings){
-					System.out.println("Meeting due on: " + dfm.format(cm.getFutureMeeting(1).getDate().getTime()) );
+					System.out.println("Meeting due on: " + dfm.format(meeting.getDate().getTime()) );
 				}
 			}
 		}
@@ -215,7 +215,7 @@ public class ConManager{
 		}while(!finished);
 		List<Meeting> meetings = cm.getFutureMeetingList(calDate);
 		for(Meeting meeting : meetings){
-			System.out.println("Meeting due on: " + dfm.format(cm.getFutureMeeting(1).getDate().getTime()) );
+			System.out.println("Meeting due on: " + dfm.format(meeting.getDate().getTime()) );
 			System.out.println("Contacts attending:");
 			Set<Contact> contacts = meeting.getContacts();
 			for(Contact contact : contacts){
@@ -248,11 +248,39 @@ public class ConManager{
 		}
 	}
 
-	public void listAllMeetings(){}
+	public void listAllMeetings(){
+		List<Meeting> meetings = cm.getMeetings();
+		for(Meeting meeting : meetings){
+			System.out.println("Meeting due on: " + dfm.format(meeting.getDate().getTime()) );
+			System.out.println("Contacts attending:");
+			Set<Contact> contacts = meeting.getContacts();
+			for(Contact contact : contacts){
+				System.out.println("ID: " + contact.getId() + " " + contact.getName());
+			}
+		}
+	}
 
-	public void addNotes(){}
+	public void addNotes(){
+		System.out.println("Enter the id of a meeting for which you want to add notes");
+		String id = System.console().readLine();
+		System.out.println("Enter the id of a meeting for which you want to add notes");
+		String notes = System.console().readLine();
+		if(notes.length()==0){ notes=null;}
+		try{
+			cm.addMeetingNotes(id,notes);
+			System.out.println("Notes have been added.");
+		}catch(IllegalArgumentException ia){
+			System.out.println("No meeting with that id exists");
+		}catch(IllegalStateException is){
+			System.out.println("Cannot add notes to a future meeting.");
+		}catch(NullPointerException np){
+			System.out.println("Cannot supply empty note.");
+		}
+			
+	}
 	
 	private void addPastMeeting(){
+		
 	}
 	
 	private void addFutureMeeting(){
