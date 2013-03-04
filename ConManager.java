@@ -11,6 +11,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.text.ParseException;
 
+/**
+* Program providing an interface to the ContactManagerImpl class.
+*/
 public class ConManager{
 	ContactManagerImpl cm = null;
 	SimpleDateFormat dfm = new SimpleDateFormat("dd-MM-yyyy");
@@ -22,7 +25,7 @@ public class ConManager{
 	}
 
 	public void launch(){
-
+		//Start Contact Manager and load contacts.txt if it is available
 		System.out.println("Starting Contact Manager...");
 		boolean result = readFile();
 		if (!result){
@@ -169,9 +172,9 @@ public class ConManager{
 		}
 
 	}
-
-
+	
 	private Set<Contact> returnContacts(){
+		//search for contacts based on id or name
 		                           System.out.println("Enter the name or contact id number of the contact you are looking for:");
 		                           String str = System.console().readLine();
 		                           int id = 0;
@@ -203,7 +206,6 @@ public class ConManager{
 
 
 	                                                 private void printContacts( Set<Contact> contacts){
-
 		                                                 for(Contact contact : contacts){
 			                                                 System.out.println("ID: " + contact.getId() + " " + contact.getName() + "\nNotes: " + contact.getNotes());
 			                                                 List<Meeting> fMeetings = cm.getFutureMeetingList(contact);
@@ -285,9 +287,11 @@ public class ConManager{
 		                                                 List<Meeting> meetings = cm.getMeetings();
 		                                                 for(Meeting meeting : meetings){
 			                                                 if(meeting instanceof FutureMeetingImpl){
+			                                                 	 //print out Future Meeting
 				                                                 System.out.println("Meeting (ID " + meeting.getId() + ") due on: " + dfm.format(meeting.getDate().getTime()) );
 				                                                 System.out.println("Contacts attending:");
 			                                                 }else{
+			                                                 	 //Print out past meeting
 				                                                 System.out.println("Meeting (ID " + meeting.getId() + ") took place on: " + dfm.format(meeting.getDate().getTime()) );
 				                                                 System.out.println("Contacts that attended:");
 				                                                 System.out.println("Notes: " + ((PastMeetingImpl)(meeting)).getNotes());
@@ -296,6 +300,7 @@ public class ConManager{
 			                                                 for(Contact contact : contacts){
 				                                                 System.out.println("ID: " + contact.getId() + " " + contact.getName());
 			                                                 }
+			                                                 //Print separator
 			                                                 System.out.println("--------------");
 		                                                 }
 	                                                 }
@@ -328,12 +333,15 @@ public class ConManager{
 		                                                 Set<Contact> contacts = new TreeSet<>();
 		                                                 String str = null;
 		                                                 System.out.println("Add contacts to meeting:");
+		                                                 
+		                                                 //Read in contacts
 		                                                 do{
 			                                                 contacts.add(returnSingleContact());
 			                                                 System.out.println("Enter another contact? [Y/N]");
 			                                                 str = System.console().readLine();
 			                                                 str = str.toLowerCase();
 		                                                 }while(!str.equals("n"));
+		                                                 
 		                                                 System.out.println("Enter notes for meeting:");
 		                                                 String notes = System.console().readLine();
 		                                                 try{
@@ -352,12 +360,15 @@ public class ConManager{
 		                                                 Set<Contact> contacts = new TreeSet<>();
 		                                                 String str = null;
 		                                                 System.out.println("Add contacts to meeting:");
+		                                                 
+		                                                 //Read in contacts
 		                                                 do{
 			                                                 contacts.add(returnSingleContact());
 			                                                 System.out.println("Enter another contact? [Y/N]");
 			                                                 str = System.console().readLine();
 			                                                 str = str.toLowerCase();
 		                                                 }while(!str.equals("n"));
+		                                                 
 		                                                 try{
 			                                                 cm.addFutureMeeting(contacts,date);
 		                                                 }catch(IllegalArgumentException ia){

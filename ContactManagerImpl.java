@@ -23,41 +23,85 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	private Set<Contact> contacts = new TreeSet<>();
 	private int nextContactId;
 	private int nextMeetingId;
+	
 
+	/**
+	* ContactManagerImpl no-args constructor
+	*/
 	public ContactManagerImpl(){
 
 		
 	}
 
-	
+	/**
+	* getter for meetings field
+	*
+	*@return List<Meeting> object
+	*/
 	public List<Meeting> getMeetings(){
 		Collections.sort(meetings,null);
 		return meetings;
 	}
 
+	/**
+	* setter for Meetings field
+	*
+	*@param meetings List<Meeting> object 
+	*/
 	public void setMeetings(List<Meeting> meetings){
 		this.meetings = meetings;
 	}
+	
+	/**
+	* setter for Contacts field
+	*
+	*@param meetings Set<Contact> object 
+	*/
 	public void setContacts(Set<Contact> contacts){
 		this.contacts = contacts;
 	}
 
+	/**
+	* getter for contacts field
+	*
+	*@return Set<Contact> object
+	*/
 	public Set<Contact> getContacts(){
 		return contacts;
 	}
 
+	/**
+	* getter for nextContactId field
+	*
+	*@return int for next available contact id 
+	*/
 	public int getNextContactId(){
 		return nextContactId;
 	}
 
+	/**
+	* setter for nextContactId field
+	*
+	*@param nextContactId int 
+	*/
 	public void setNextContactId(int nextContactId){
 		this.nextContactId = nextContactId;
 	}
 
+	/**
+	* setter for nextMeetingId field
+	*
+	*@param nextMeetingId int 
+	*/
 	public void setNextMeetingId(int nextMeetingId){
 		this.nextMeetingId = nextMeetingId;
 	}
 
+	/**
+	* getter for nextMeetingId field
+	*
+	*@return int for next available meeting id 
+	*/
 	public int getNextMeetingId(){
 		return nextMeetingId;
 	}
@@ -468,6 +512,11 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return cns;
 	}
 
+	/**
+	* return a list of PastMeeting IDs
+	*
+	*@return List<Integer> List of ids
+	*/
 	public List<Integer> getPastMeetingIDs(){
 		List<Integer> ids = new LinkedList<>();
 		for(Meeting meeting : meetings){

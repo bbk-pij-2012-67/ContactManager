@@ -299,7 +299,7 @@ public class ContactManagerTest{
 		cm.addMeetingNotes(pastMeetingId,null);
 		
 	}
-
+	
 	@After
 	public void CleanUp(){
 		//cm.flush();

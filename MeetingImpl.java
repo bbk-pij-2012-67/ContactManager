@@ -26,17 +26,35 @@ public class MeetingImpl implements Meeting, Comparable<Meeting>, Serializable {
 		this.contacts = contacts;
 	}
 	
+	/**
+	* No-argument constructor. Required for serialization.
+	*/
 	public MeetingImpl(){
 	}
 	
+	/**
+	* id setter.
+	*
+	* @param id Value to set to id field.
+	*/
 	public void setId(int id){
 		this.id = id;
 	}
 	
+	/**
+	* date setter.
+	*
+	* @param date Value to set to date field.
+	*/
 	public void setDate(Calendar date){
 		this.date = date;
 	}
 	
+	/**
+	* contacts setter.
+	*
+	* @param contacts Value to set to contacts field.
+	*/
 	public void setContacts(Set<Contact> contacts){
 		this.contacts = contacts;
 	}
@@ -73,6 +91,17 @@ public class MeetingImpl implements Meeting, Comparable<Meeting>, Serializable {
 		return contacts;
 	}
 	
+	/**
+	* Return result of comparison.
+	*
+	* Compares meetings based on date of meeting
+	*
+	* @param m Meeting to compare.
+	* @return An int value indicating the result of comparison. 
+	*	If the meeting to compare is later than this meeting, the result is -1.
+	*	If the meeting to compare is at the same time as this meeting, the result is 0.
+	*	If the meeting to compare is earlier than this meeting, the result is 1.
+	*/
 	@Override
 	public int compareTo(Meeting m){
 		if((this.getDate()).before(m.getDate())){
