@@ -4,12 +4,16 @@ import java.io.FileInputStream;
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.ParseException;
 
 public class ConManager{
 	ContactManagerImpl cm = null;
-	SimpleDateFormat dfm = new SimpleDateFormat("dd-mm-yyyy");
+	SimpleDateFormat dfm = new SimpleDateFormat("dd-MM-yyyy");
 
 	public static void main(String[] args){
 		ConManager cnm = new ConManager();
@@ -59,7 +63,7 @@ public class ConManager{
 		return result;
 	}
 
-	public void Menu1(){
+	private void Menu1(){
 		String str;
 		while(true){
 
@@ -75,12 +79,13 @@ public class ConManager{
 			}else if(str.equals("m")){
 				meetingsMenu();
 			}else if(str.equals("s")){
-				cm.flush();
+				save();
+
 			}
 		}
 	}
 
-	public void contactsMenu(){
+	private void contactsMenu(){
 
 		String str;
 		while(true){
@@ -98,14 +103,14 @@ public class ConManager{
 			}else if(str.equals("f")){
 				findContact();
 			}else if(str.equals("s")){
-				cm.flush();
+				save();
 			}else if(str.equals("p")){
 				return;
 			}
 		}
 	}
 
-	public void meetingsMenu(){
+	private void meetingsMenu(){
 		String str;
 		while(true){
 			do{
@@ -124,14 +129,14 @@ public class ConManager{
 			}else if(str.equals("n")){
 				addNotes();
 			}else if(str.equals("s")){
-				cm.flush();
+				save();
 			}else if(str.equals("p")){
 				return;
 			}
 		}
 	}
 
-	public void listContacts(){
+	private void listContacts(){
 		Set<Contact> contacts = ((ContactManagerImpl)(cm)).getContacts();
 		if(contacts.size()!=0){
 			for(Contact contact : contacts){
@@ -142,7 +147,7 @@ public class ConManager{
 		}
 	}
 
-	public void addContact(){
+	private void addContact(){
 		try{
 			System.out.println("Enter the name of the contact:");
 			String name = System.console().readLine();
@@ -156,180 +161,222 @@ public class ConManager{
 		}
 	}
 
-	public void findContact(){
-		
-		printContacts(returnContacts);
-
-	}
-	
-	
-	private Set<Contact> returnContact(){
-		System.out.println("Enter the name or contact id number of the contact you are looking for:");
-		String str = System.console().readLine();
-		int id = 0;
-		//test if response is an integer. if so, search by id
+	private void findContact(){
 		try{
-			id = Integer.parseInt(str);
-		}catch(NumberFormatException nf){
-			//not a number
-		}
-		Set<Contact> contacts;
-		if(id != 0){
-			contacts = cm.getContacts(id);
-
-		}else{
-			contacts = cm.getContacts(str);
-
-		}
-		return contacts;
-	}
-	
-	private Contact returnSingleContact(){
-		Set<Contact> contacts = returnContact();
-		for(Contact contact : contacts){
-			return contact;
-		}
-	}
-		
-
-	public void printContacts( Set<Contact> contacts){
-
-		for(Contact contact : contacts){
-			System.out.println("ID: " + contact.getId() + " " + contact.getName() + " " + contact.getNotes());
-			List<Meeting> fMeetings = cm.getFutureMeetingList(contact);
-			if(fMeetings.size()==0){
-				System.out.println("No meetings");
-			}else{
-				for(Meeting meeting : fMeetings){
-					System.out.println("Meeting due on: " + dfm.format(meeting.getDate().getTime()) );
-				}
-			}
-		}
-
-
-
-	}
-
-	public void listMeetingsByDate(){
-		Calendar calDate = chooseDate();
-		List<Meeting> meetings = cm.getFutureMeetingList(calDate);
-		for(Meeting meeting : meetings){
-			System.out.println("Meeting due on: " + dfm.format(meeting.getDate().getTime()) );
-			System.out.println("Contacts attending:");
-			Set<Contact> contacts = meeting.getContacts();
-			for(Contact contact : contacts){
-				System.out.println("ID: " + contact.getId() + " " + contact.getName());
-			}
-		}
-	}
-	
-	private Calendar chooseDate(){
-		Calendar calDate = Calendar.getInstance();
-		Date dDate;
-		boolean finished = false;
-		do{
-
-			System.out.println("Enter a date in dd-mm-yyyy format");
-			System.out.println("Year: ");
-			String date = System.console().readLine();
-			try{
-				dDate = dfm.parse(date);
-				calDate.setTime(dDate);
-				finished = true;
-			}catch(ParseException pe){
-				System.out.println("Date is invalid");
-			}
-		}while(!finished);
-		return calDate;
-	}
-
-
-
-	public void addMeeting(){
-		String str;
-		while(true){
-			do{
-				System.out.println("\nSelect: [P]-Past Meeting [F]-Future Meeting [S]-Save [P]-Previous Menu [Q]-Quit");
-				str = System.console().readLine();
-				str = str.toLowerCase();
-			}while(!str.equals("p") && !str.equals("f") && !str.equals("s") && !str.equals("p") && !str.equals("q"));
-			if(str.equals("q")){
-				quitProgram();
-			}else if(str.equals("p")){
-				addPastMeeting();
-			}else if(str.equals("f")){
-				addFutureMeeting();
-			}else if(str.equals("s")){
-				cm.flush();
-			}else if(str.equals("p")){
-				return;
-			}
-		}
-	}
-
-	public void listAllMeetings(){
-		List<Meeting> meetings = cm.getMeetings();
-		for(Meeting meeting : meetings){
-			System.out.println("Meeting due on: " + dfm.format(meeting.getDate().getTime()) );
-			System.out.println("Contacts attending:");
-			Set<Contact> contacts = meeting.getContacts();
-			for(Contact contact : contacts){
-				System.out.println("ID: " + contact.getId() + " " + contact.getName());
-			}
-		}
-	}
-
-	public void addNotes(){
-		System.out.println("Enter the id of a meeting for which you want to add notes");
-		String id = System.console().readLine();
-		System.out.println("Enter the id of a meeting for which you want to add notes");
-		String notes = System.console().readLine();
-		if(notes.length()==0){ notes=null;}
-		try{
-			cm.addMeetingNotes(id,notes);
-			System.out.println("Notes have been added.");
-		}catch(IllegalArgumentException ia){
-			System.out.println("No meeting with that id exists");
-		}catch(IllegalStateException is){
-			System.out.println("Cannot add notes to a future meeting.");
+			printContacts(returnContacts());
 		}catch(NullPointerException np){
-			System.out.println("Cannot supply empty note.");
+			System.out.println(np.getMessage());
 		}
-			
-	}
-	
-	private void addPastMeeting(){
-		Calendar date = chooseDate();
-		Set<Contact> contacts = null;
-		String str = null;
-		System.out.println("Add contacts to meeting:");
-		do{
-			contacts.add(returnSungleContact()):
-			System.out.println("Enter another contact? [Y/N]");
-			str = System.console().readLine();
-			str = str.toLowerCase();
-		}while(!str.equals("n"));
-		System.out.println("Enter notes for meeting:");
-		String notes = System.console().readLine();
-		try{
-			cm.addNewPastmeeting(contacts,date,notes);
-		}catch(IllegalArgumentException ia){
-			System.out.println("Contact list empty or contacts do not exist.");
-		}catch(NullPointerException np){
-			System.out.println("Contact list, date, or notes are null.");
-		}
-	}
-	
-	private void addFutureMeeting(){
-	}
 
-	public void quitProgram(){
-		cm.flush();
-		System.out.println("Goodbye.");
-		System.exit(0);
 	}
 
 
-}
+	private Set<Contact> returnContacts(){
+		                           System.out.println("Enter the name or contact id number of the contact you are looking for:");
+		                           String str = System.console().readLine();
+		                           int id = 0;
+		                           //test if response is an integer. if so, search by id
+		                           try{
+			                           id = Integer.parseInt(str);
+		                           }catch(NumberFormatException nf){
+			                           //not a number
+		                           }
+		                           Set<Contact> contacts;
+		                           if(id != 0){
+			                           contacts = cm.getContacts(id);
 
-//public void
+		                           }else{
+			                           contacts = cm.getContacts(str);
+
+		                           }
+		                           return contacts;
+	                           }
+
+	                           private Contact returnSingleContact(){
+		                                                 Set<Contact> contacts = returnContacts();
+		                                                 for(Contact contact : contacts){
+			                                                 return contact;
+		                                                 }
+		                                                 System.out.println("Contact not found");
+		                                                 return null;
+	                                                 }
+
+
+	                                                 private void printContacts( Set<Contact> contacts){
+
+		                                                 for(Contact contact : contacts){
+			                                                 System.out.println("ID: " + contact.getId() + " " + contact.getName() + "\nNotes: " + contact.getNotes());
+			                                                 List<Meeting> fMeetings = cm.getFutureMeetingList(contact);
+			                                                 if(fMeetings.size()==0){
+				                                                 System.out.println("No meetings");
+			                                                 }else{
+				                                                 for(Meeting meeting : fMeetings){
+					                                                 System.out.println("Meeting due on: " + dfm.format(meeting.getDate().getTime()) );
+				                                                 }
+			                                                 }
+		                                                 }
+
+
+
+	                                                 }
+
+	                                                 private void listMeetingsByDate(){
+		                                                 Calendar calDate = chooseDate();
+		                                                 List<Meeting> meetings = cm.getFutureMeetingList(calDate);
+		                                                 if(meetings != null){
+			                                                 for(Meeting meeting : meetings){
+				                                                 System.out.println("Meeting due on: " + dfm.format(meeting.getDate().getTime()) );
+				                                                 System.out.println("Contacts attending:");
+				                                                 Set<Contact> contacts = meeting.getContacts();
+				                                                 for(Contact contact : contacts){
+					                                                 System.out.println("ID: " + contact.getId() + " " + contact.getName());
+				                                                 }
+				                                                 System.out.println("--------------");
+			                                                 }
+		                                                 }else{
+			                                                 System.out.println("No meetings found.");
+		                                                 }
+	                                                 }
+
+	                                                 private Calendar chooseDate(){
+		                                                 Calendar calDate = Calendar.getInstance();
+		                                                 Date dDate;
+		                                                 boolean finished = false;
+		                                                 do{
+
+			                                                 System.out.println("Enter a date in dd-mm-yyyy format");
+			                                                 String date = System.console().readLine();
+			                                                 try{
+				                                                 dDate = dfm.parse(date);
+				                                                 calDate.setTime(dDate);
+				                                                 finished = true;
+			                                                 }catch(ParseException pe){
+				                                                 System.out.println("Date is invalid");
+			                                                 }
+		                                                 }while(!finished);
+		                                                 return calDate;
+	                                                 }
+
+
+
+	                                                 private void addMeeting(){
+		                                                 String str;
+		                                                 while(true){
+			                                                 do{
+				                                                 System.out.println("\nSelect: [A]-Past Meeting [F]-Future Meeting [S]-Save [P]-Previous Menu [Q]-Quit");
+				                                                 str = System.console().readLine();
+				                                                 str = str.toLowerCase();
+			                                                 }while(!str.equals("a") && !str.equals("f") && !str.equals("s") && !str.equals("p") && !str.equals("q"));
+			                                                 if(str.equals("q")){
+				                                                 quitProgram();
+			                                                 }else if(str.equals("a")){
+				                                                 addPastMeeting();
+			                                                 }else if(str.equals("f")){
+				                                                 addFutureMeeting();
+			                                                 }else if(str.equals("s")){
+				                                                 save();
+			                                                 }else if(str.equals("p")){
+				                                                 return;
+			                                                 }
+		                                                 }
+	                                                 }
+
+	                                                 private void listAllMeetings(){
+		                                                 List<Meeting> meetings = cm.getMeetings();
+		                                                 for(Meeting meeting : meetings){
+			                                                 if(meeting instanceof FutureMeetingImpl){
+				                                                 System.out.println("Meeting (ID " + meeting.getId() + ") due on: " + dfm.format(meeting.getDate().getTime()) );
+				                                                 System.out.println("Contacts attending:");
+			                                                 }else{
+				                                                 System.out.println("Meeting (ID " + meeting.getId() + ") took place on: " + dfm.format(meeting.getDate().getTime()) );
+				                                                 System.out.println("Contacts that attended:");
+				                                                 System.out.println("Notes: " + ((PastMeetingImpl)(meeting)).getNotes());
+			                                                 }
+			                                                 Set<Contact> contacts = meeting.getContacts();
+			                                                 for(Contact contact : contacts){
+				                                                 System.out.println("ID: " + contact.getId() + " " + contact.getName());
+			                                                 }
+			                                                 System.out.println("--------------");
+		                                                 }
+	                                                 }
+
+	                                                 private void addNotes(){
+		                                                 try{
+			                                                 System.out.println("Enter the id of a meeting for which you want to add notes");
+			                                                 String id = System.console().readLine();
+			                                                 int idInt = (int)(Integer.parseInt(id));
+			                                                 System.out.println("Enter the notes for the meeting.");
+			                                                 String notes = System.console().readLine();
+			                                                 if(notes.length()==0){ notes=null;}
+			                                                 try{
+				                                                 cm.addMeetingNotes(idInt,notes);
+				                                                 System.out.println("Notes have been added.");
+			                                                 }catch(IllegalArgumentException ia){
+				                                                 System.out.println("No meeting with that id exists");
+			                                                 }catch(IllegalStateException is){
+				                                                 System.out.println("Cannot add notes to a future meeting.");
+			                                                 }catch(NullPointerException np){
+				                                                 System.out.println("Cannot supply empty note.");
+			                                                 }
+		                                                 }catch(NumberFormatException nf){
+			                                                 System.out.println("Invalid data entered as a number");
+		                                                 }
+	                                                 }
+
+	                                                 private void addPastMeeting(){
+		                                                 Calendar date = chooseDate();
+		                                                 Set<Contact> contacts = new TreeSet<>();
+		                                                 String str = null;
+		                                                 System.out.println("Add contacts to meeting:");
+		                                                 do{
+			                                                 contacts.add(returnSingleContact());
+			                                                 System.out.println("Enter another contact? [Y/N]");
+			                                                 str = System.console().readLine();
+			                                                 str = str.toLowerCase();
+		                                                 }while(!str.equals("n"));
+		                                                 System.out.println("Enter notes for meeting:");
+		                                                 String notes = System.console().readLine();
+		                                                 try{
+			                                                 cm.addNewPastMeeting(contacts,date,notes);
+		                                                 }catch(IllegalArgumentException ia){
+			                                                 System.out.println("Contact list empty or contacts do not exist.");
+		                                                 }catch(NullPointerException np){
+			                                                 System.out.println("Contact list, date, or notes are null.");
+		                                                 }
+	                                                 }
+
+	                                                 private void addFutureMeeting(){
+		                                                 //Add date
+		                                                 Calendar date = chooseDate();
+		                                                 //Add contacts
+		                                                 Set<Contact> contacts = new TreeSet<>();
+		                                                 String str = null;
+		                                                 System.out.println("Add contacts to meeting:");
+		                                                 do{
+			                                                 contacts.add(returnSingleContact());
+			                                                 System.out.println("Enter another contact? [Y/N]");
+			                                                 str = System.console().readLine();
+			                                                 str = str.toLowerCase();
+		                                                 }while(!str.equals("n"));
+		                                                 try{
+			                                                 cm.addFutureMeeting(contacts,date);
+		                                                 }catch(IllegalArgumentException ia){
+			                                                 System.out.println(ia.getMessage());
+		                                                 }
+	                                                 }
+
+	                                                 private void quitProgram(){
+		                                                 save();
+		                                                 System.out.println("Quitting...\nGoodbye.");
+		                                                 System.exit(0);
+	                                                 }
+
+	                                                 private void save(){
+		                                                 cm.flush();
+		                                                 System.out.println("Saving to file...");
+	                                                 }
+
+
+                                                 }
+
+                                                 //public void

@@ -12,6 +12,8 @@ import java.io.BufferedOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.*;
+import java.util.Collections;
+
 /**
 * A class to manage your contacts and meetings.
 */
@@ -23,21 +25,13 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	private int nextMeetingId;
 
 	public ContactManagerImpl(){
+
 		
-		//contacts = new TreeSet<>();
-		//nextContactId = 0;
-		//nextMeetingId = 0;
-		//meetings = new LinkedList<>();
 	}
 
-	//public ContactManagerImpl(List<Meeting> meetings,Set<Contact> contacts, int nextContactId, int nextMeetingId){
-	//	this.contacts = contacts;
-	//	this.nextContactId = nextContactId;
-	//	this.nextMeetingId = nextMeetingId;
-	//	this.meetings = meetings;
-	//}
-
+	
 	public List<Meeting> getMeetings(){
+		Collections.sort(meetings,null);
 		return meetings;
 	}
 
@@ -82,8 +76,13 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	*/
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date){
 		//Check if date is in the past.
-		date.set(date.get(Calendar.YEAR),date.get(Calendar.MONTH),date.get(Calendar.DATE));
-		if(date.before(Calendar.getInstance())){
+		//date.set(date.get(Calendar.YEAR),date.get(Calendar.MONTH),date.get(Calendar.DATE));
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MILLISECOND,0);
+		if(date.before(cal)){
 			throw new IllegalArgumentException("Date is past");
 		}else if(!contactsAreValid(contacts)){
 			throw new IllegalArgumentException("Contact unknown");
@@ -153,13 +152,15 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			//then create a pastMeeting in its place.
 			if(returnedMeeting instanceof PastMeetingImpl){
 				return (PastMeetingImpl)returnedMeeting;
-			}else if(returnedMeeting instanceof FutureMeetingImpl){
+			/*}else if(returnedMeeting instanceof FutureMeetingImpl){
 				Calendar mtDate = returnedMeeting.getDate();
 				Set<Contact> mtContacts = returnedMeeting.getContacts();
 				meetings.remove(returnedMeeting);
 				PastMeetingImpl updatedMeeting = new PastMeetingImpl(id,mtDate,mtContacts,null);
 				meetings.add(updatedMeeting);
-				return updatedMeeting;
+				return updatedMeeting;*/
+				
+					
 			}
 		}
 
@@ -249,9 +250,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 				}
 			}
 		}
-		
-			return fMeetings;
-		
+		Collections.sort(fMeetings,null);
+		return fMeetings;
+
 	}
 
 
@@ -278,6 +279,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		if (fMeetings.isEmpty()){
 			return null;
 		}else{
+			Collections.sort(fMeetings,null);
 			return fMeetings;
 		}
 	}
@@ -315,6 +317,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		if (pMeetings.isEmpty()){
 			return null;
 		}else{
+			Collections.sort(pMeetings,null);
 			return pMeetings;
 		}
 
@@ -405,7 +408,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			cn.addNotes(notes);
 			contacts.add(cn);
 		}
-		
+
 
 	}
 
@@ -494,7 +497,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			xml.writeObject(this);
 
 		}catch(FileNotFoundException fnfe){
-			}catch(IOException ie){
+		}catch(IOException ie){
 		}finally{
 
 			xml.close();

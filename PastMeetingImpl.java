@@ -38,6 +38,11 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting{
 		return notes;
 	}
 	
+	public void setNotes(String notes){
+		//setter required for serialization
+		this.notes = notes;
+	}
+	
 	public void addNotes(String notes){
 		this.notes = notes;
 	}
