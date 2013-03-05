@@ -477,7 +477,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 				}
 			}
 			if(contactNotFound){
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Contact not found");
 
 			}
 		}
