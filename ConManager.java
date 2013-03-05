@@ -172,27 +172,33 @@ public class ConManager{
 		}
 
 	}
-	
+
 	private Set<Contact> returnContacts(){
-		//search for contacts based on id or name
+		                           //search for contacts based on id or name
 		                           System.out.println("Enter the name or contact id number of the contact you are looking for:");
 		                           String str = System.console().readLine();
 		                           int id = 0;
 		                           //test if response is an integer. if so, search by id
+		                           Set<Contact> contacts= new TreeSet<>();
 		                           try{
 			                           id = Integer.parseInt(str);
+
+			                           
+			                           if(id != 0){
+				                           contacts = cm.getContacts(id);
+
+			                           }else{
+				                           contacts = cm.getContacts(str);
+
+			                           }
 		                           }catch(NumberFormatException nf){
 			                           //not a number
+			                           System.out.println(nf.getMessage());
+		                           }catch(IllegalArgumentException ia){
+			                           System.out.println(ia.getMessage());
+		                           }finally{
+			                           return contacts;
 		                           }
-		                           Set<Contact> contacts;
-		                           if(id != 0){
-			                           contacts = cm.getContacts(id);
-
-		                           }else{
-			                           contacts = cm.getContacts(str);
-
-		                           }
-		                           return contacts;
 	                           }
 
 	                           private Contact returnSingleContact(){
@@ -285,13 +291,16 @@ public class ConManager{
 
 	                                                 private void listAllMeetings(){
 		                                                 List<Meeting> meetings = cm.getMeetings();
+		                                                 if (meetings.size()==0){
+		                                                 	 System.out.println("No meetings found.");
+		                                                 }
 		                                                 for(Meeting meeting : meetings){
 			                                                 if(meeting instanceof FutureMeetingImpl){
-			                                                 	 //print out Future Meeting
+				                                                 //print out Future Meeting
 				                                                 System.out.println("Meeting (ID " + meeting.getId() + ") due on: " + dfm.format(meeting.getDate().getTime()) );
 				                                                 System.out.println("Contacts attending:");
 			                                                 }else{
-			                                                 	 //Print out past meeting
+				                                                 //Print out past meeting
 				                                                 System.out.println("Meeting (ID " + meeting.getId() + ") took place on: " + dfm.format(meeting.getDate().getTime()) );
 				                                                 System.out.println("Contacts that attended:");
 				                                                 System.out.println("Notes: " + ((PastMeetingImpl)(meeting)).getNotes());
@@ -333,7 +342,7 @@ public class ConManager{
 		                                                 Set<Contact> contacts = new TreeSet<>();
 		                                                 String str = null;
 		                                                 System.out.println("Add contacts to meeting:");
-		                                                 
+
 		                                                 //Read in contacts
 		                                                 do{
 			                                                 contacts.add(returnSingleContact());
@@ -341,7 +350,7 @@ public class ConManager{
 			                                                 str = System.console().readLine();
 			                                                 str = str.toLowerCase();
 		                                                 }while(!str.equals("n"));
-		                                                 
+
 		                                                 System.out.println("Enter notes for meeting:");
 		                                                 String notes = System.console().readLine();
 		                                                 try{
@@ -360,7 +369,7 @@ public class ConManager{
 		                                                 Set<Contact> contacts = new TreeSet<>();
 		                                                 String str = null;
 		                                                 System.out.println("Add contacts to meeting:");
-		                                                 
+
 		                                                 //Read in contacts
 		                                                 do{
 			                                                 contacts.add(returnSingleContact());
@@ -368,7 +377,7 @@ public class ConManager{
 			                                                 str = System.console().readLine();
 			                                                 str = str.toLowerCase();
 		                                                 }while(!str.equals("n"));
-		                                                 
+
 		                                                 try{
 			                                                 cm.addFutureMeeting(contacts,date);
 		                                                 }catch(IllegalArgumentException ia){
