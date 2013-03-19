@@ -7,7 +7,7 @@ import java.io.*;
 *
 * Meetings have unique IDs, scheduled date and a list of participating contacts
 */
-public class MeetingImpl implements Meeting, Comparable<Meeting>, Serializable {
+public abstract class MeetingImpl implements Meeting, Comparable<Meeting>, Serializable {
 	
 	private int id;
 	private Calendar date;

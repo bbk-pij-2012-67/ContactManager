@@ -188,12 +188,12 @@ public class ConManager{
 				                           contacts = cm.getContacts(id);
 
 			                           }else{
-				                           contacts = cm.getContacts(str);
-
+			                           	   throw new IllegalArgumentException();
 			                           }
 		                           }catch(NumberFormatException nf){
 			                           //not a number
-			                           System.out.println(nf.getMessage());
+			                           contacts = cm.getContacts(str);
+			                          // System.out.println(nf.getMessage());
 		                           }catch(IllegalArgumentException ia){
 			                           System.out.println(ia.getMessage());
 		                           }finally{
